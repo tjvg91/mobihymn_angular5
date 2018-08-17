@@ -1,0 +1,29 @@
+page-settings-popover-list {
+    ion-header{
+        ion-navbar{
+            min-height: 40px !important;
+            ion-title{
+                .toolbar-title{
+                    font-size: 1.5rem;
+                }
+            }
+        }
+    }
+    
+      
+        
+    ion-content{
+        height: 100%;
+        .scroll-content{ 
+            z-index: 200;
+
+            ion-item{
+                background: inherit;
+                z-index: 300;
+                ion-icon{
+                    float: right;
+                }    
+            }
+        }
+    }
+}

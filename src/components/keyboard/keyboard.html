@@ -1,0 +1,37 @@
+<div class="keyboard" [@slideUp]="keyboardShown">
+    <div class="buttons" *ngIf="keyboardShown == 'hidden'">
+        <button ion-button color="primary" class="slide up" (click)="showKeyboard()">
+            <i class="fa fa-caret-up"></i>
+        </button>
+    </div>
+    <div class="keys">
+        <button class="key" aria-valuetext="1" (click)="keyChange('1')">1</button>
+        <button class="key" aria-valuetext="2" (click)="keyChange('2')">2</button>
+        <button class="key" aria-valuetext="3" (click)="keyChange('3')">3</button>
+        <button class="key" aria-valuetext="s" (click)="keyChange('s')">s</button>
+    </div>
+    <div class="keys">
+        <button class="key" aria-valuetext="4" (click)="keyChange('4')">4</button>
+        <button class="key" aria-valuetext="5" (click)="keyChange('5')">5</button>
+        <button class="key" aria-valuetext="6" (click)="keyChange('6')">6</button>
+        <button class="key" aria-valuetext="t" (click)="keyChange('t')">t</button>
+    </div>
+    <div class="keys">
+        <button class="key" aria-valuetext="7" (click)="keyChange('7')">7</button>
+        <button class="key" aria-valuetext="8" (click)="keyChange('8')">8</button>
+        <button class="key" aria-valuetext="9" (click)="keyChange('9')">9</button>
+        <button class="key" aria-valuetext="f" (click)="keyChange('f')">f</button>
+    </div>
+    <div class="keys">
+        <button class="key" aria-valuetext="b" (click)="keyChange('b')">
+            <span class="fa fa-long-arrow-left"></span>
+        </button>
+        <button class="key" aria-valuetext="0" (click)="keyChange('0')">0</button>
+        <button class="key" aria-valuetext="e" (click)="keyChange('e')">
+            <span class="fa fa-check"></span>
+        </button>
+        <button class="key" aria-valuetext="c" (click)="hideKeyboard()">
+            <span class="fa fa-arrow-down"></span>
+        </button>
+    </div>
+</div>

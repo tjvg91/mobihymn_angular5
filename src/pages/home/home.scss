@@ -1,0 +1,30 @@
+page-home {
+    ion-item-group {
+        margin-top: 0 !important;
+        ion-item {
+            .item-inner {
+                border-bottom: 1px solid #000 !important;
+            }
+        }
+
+        &.empty{
+            ion-item ion-label{
+                text-align: center;
+            }
+        }
+    }
+    .banner {
+        text-align: center;
+        padding: 5px 0;
+        &[type="error"] {
+            background: map-get($colors, 'danger');
+        }
+        &[type="success"] {
+            background: map-get($colors, 'secondary');
+        }
+        &[type="progress"] {
+            background: map-get($colors, 'primary');
+            color: #222;
+        }
+    }
+}

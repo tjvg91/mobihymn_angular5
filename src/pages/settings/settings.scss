@@ -1,0 +1,15 @@
+page-settings {
+    .scroll-content {
+        padding: 0 !important;
+        ion-list-header {
+            margin: 0 !important;
+        }
+        ion-list ion-item .item-inner{
+            border-bottom: none !important;
+        }
+    }
+}
+
+.alert-wp .alert-radion-button-wp[aria-checked="true"] .alert-radio-label{
+    color: #ffeb3b !important;
+}

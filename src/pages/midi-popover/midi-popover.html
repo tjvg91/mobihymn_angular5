@@ -1,0 +1,41 @@
+<!--
+  Generated template for the MidiPopoverPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content>
+  <ion-list>
+    <ion-item-group>
+      <ion-item-divider>Tempo <ion-badge item-end>{{ valTempo }}</ion-badge>        
+      </ion-item-divider>
+      <ion-item>
+        <ion-range [min]="minTempo" [max]="maxTempo" [(ngModel)]="valTempo" steps="5" (tap)="tempoChange()" (panend)="tempoChange()">
+          <ion-label range-left>60</ion-label>
+          <ion-label range-right>120</ion-label>
+        </ion-range>
+      </ion-item>
+    </ion-item-group>
+    <!-- <ion-item-group>
+      <ion-item-divider>Instrument</ion-item-divider>
+      <ion-item>
+        <ion-select [(ngModel)]="curInstru">
+          <ion-option value="acoustic_grand_piano-mp3">Piano</ion-option>
+          <ion-option value="acoustic_guitar_nylon-mp3">Guitar</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-item-group> -->
+    <ion-item-group>
+        <ion-item-divider>Tracks</ion-item-divider>
+        <ion-item *ngFor="let track of tracks">
+          <p item-start>Track {{ track.number - 1 }}</p>
+          <button ion-button item-end color="primary" (click)="trackChange(track, event)" *ngIf="!track.mute">
+            <ion-icon name="volume-up"></ion-icon>
+          </button>
+          <button ion-button outline item-end color="primary" (click)="trackChange(track, event)" *ngIf="track.mute">            
+            <ion-icon name="volume-off" *ngIf="track.mute" ></ion-icon>
+          </button>
+        </ion-item>
+      </ion-item-group>
+  </ion-list>
+</ion-content>

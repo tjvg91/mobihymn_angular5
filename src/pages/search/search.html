@@ -1,0 +1,28 @@
+<!--
+  Generated template for the SearchPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar color="dark">
+        <ion-buttons start>
+            <button ion-button (tap)="goBack()" *ngIf="canBack">
+                <ion-icon name="arrow-back"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>Search</ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-searchbar (search)="getItems($event)" #searchHymn [showCancelButton]="true" [animated]="true" placeholder="Search this hymnal"></ion-searchbar>
+    <ion-list>
+        <ion-list-header *ngIf="searchItems">{{ searchItems.length }} Result(s)</ion-list-header>
+        <ion-item *ngFor="let item of searchItems" (click)="goToReader(item.id)">
+            <h2>{{ item.line }}</h2>
+            <h3>Hymn #{{ item.number }}</h3>
+        </ion-item>
+    </ion-list>
+</ion-content>

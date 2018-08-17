@@ -1,0 +1,13 @@
+page-midi-popover {
+    ion-select{
+        width: 100%;
+    }
+    ion-item{
+        p{
+            color: #fff !important;
+        }
+        .item-inner{
+            border: none !important;
+        }
+    }
+}

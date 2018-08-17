@@ -1,0 +1,14 @@
+{
+  "name": "mobihymn_ionic2",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular",
+  "proxies": [
+    {
+      "path": "/storageapi",
+      "proxyUrl": "https://firebasestorage.googleapis.com"
+    }
+  ],
+  "pro_id": "91b67970"
+}

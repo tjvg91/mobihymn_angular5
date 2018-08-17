@@ -1,0 +1,8 @@
+<ion-tabs class="tabs-md-dark" #myTabs [selectedIndex]="2">
+    <ion-tab [root]="tab2Root" tabTitle="Read" tabIcon="glasses" enabled="activeHymnal"></ion-tab>
+    <ion-tab [root]="tab3Root" tabTitle="Search" tabIcon="search" enabled="activeHymnal"></ion-tab>
+    <ion-tab [root]="tab1Root" tabTitle="Library" tabIcon="book"></ion-tab>
+    <ion-tab [root]="tab4Root" tabTitle="Settings" tabIcon="settings"></ion-tab>
+</ion-tabs>
+
+<intro-slider [style.display]="showIntro" #intro></intro-slider>

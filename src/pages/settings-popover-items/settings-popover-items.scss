@@ -1,0 +1,23 @@
+page-settings-popover-items {
+    overflow: auto;
+    ion-header{
+        background-color: #000;
+    }
+    ion-navbar{
+        min-height: 28px;
+        height: 44px;
+        
+        .back-button{
+            margin: 0 !important;
+        }
+
+        &[color="dark"]{
+            color: map-get($colors, 'light');
+            background-color: #000;
+        }
+    }
+    ion-item{
+        background-color: inherit !important;
+        z-index: 300;
+    }
+}

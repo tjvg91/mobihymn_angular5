@@ -1,0 +1,26 @@
+page-login-modal {    
+    ion-list{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        flex-direction: column;
+        .item{
+            background-color: inherit;
+            h1{
+                text-align: center;
+                text-decoration: underline;
+            }
+            button{
+                font-size: 22px !important;
+                padding: 26px !important;
+                i{
+                    margin-right: 15px;
+                }
+            }
+            ion-label{
+                margin: 0;
+            }
+        }    
+    }    
+}

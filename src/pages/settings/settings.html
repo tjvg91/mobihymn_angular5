@@ -1,0 +1,55 @@
+<!--
+  Generated template for the SettingsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar color="dark">
+        <ion-buttons start>
+            <button ion-button (tap)="goBack()" *ngIf="canBack">
+                <ion-icon name="arrow-back"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>Settings</ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-list>
+        <ion-list-header>
+            Data
+        </ion-list-header>
+        <ion-item>
+            <ion-icon name="time" item-start></ion-icon>
+            <ion-label>Recent items</ion-label>
+            <ion-select [(ngModel)]="recentNum" (ionChange)="recentChange()">
+                <ion-option value="5">5</ion-option>
+                <ion-option value="6">6</ion-option>
+                <ion-option value="7">7</ion-option>
+                <ion-option value="8">8</ion-option>
+                <ion-option value="9">9</ion-option>
+                <ion-option value="10">10</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-list-header>
+            About
+        </ion-list-header>
+        <ion-item (tap)="showAuthorModal()">
+            <ion-icon name="person" item-start></ion-icon>
+            <ion-label>Author</ion-label>
+        </ion-item>
+        <ion-item (tap)="showRevisionModal()">
+            <ion-icon name="clock" item-start></ion-icon>
+            <ion-label>Revisions</ion-label>
+        </ion-item>
+        <ion-list-header>
+            Application
+        </ion-list-header>
+        <ion-item tap="exitApp()">
+            <ion-icon name="exit" item-start></ion-icon>
+            <ion-label>Exit App</ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

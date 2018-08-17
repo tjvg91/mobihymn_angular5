@@ -1,0 +1,90 @@
+<!--
+  Generated template for the InputModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="dismiss()" clear>
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-segment [(ngModel)]="inputType">
+        <ion-segment-button value="all_hymns" (click)="hymnSelect()">
+            All hymns
+        </ion-segment-button>
+        <ion-segment-button value="bookmarks">
+            Bookmarks
+        </ion-segment-button>
+        <ion-segment-button value="recent">
+            Recent
+        </ion-segment-button>
+    </ion-segment>
+</ion-header>
+
+
+<ion-content padding>
+    <div [ngSwitch]="inputType">
+        <div *ngSwitchCase="'all_hymns'" #allHymns>
+            <ion-searchbar (keyup.enter)="preSetActiveHymn(hymnFilter.value)" (ionInput)="filterHymns($event)" [showCancelButton]="true" placeholder="Search hymn" type="number" [(ngModel)]="hymnTextFilter" #hymnFilter></ion-searchbar>
+            <!-- <div class="input-labels">
+                <label class="input-label" (click)="showKeyboard()">
+                    {{ hymnFilterString }}
+                </label>
+            </div> -->
+            <ion-list>
+                <ion-item *ngFor="let hymn of hymnList | slice:0:hymnLimit;" (click)="setActiveHymn(hymn['id'])">
+                    <h2>{{ 'Hymn #' + hymn.number }}</h2>
+                    <p>{{ hymn.firstLine }}</p>
+                </ion-item>
+            </ion-list>
+            <p class="indicator">{{ getIndicator() }}</p>
+            <!-- <ion-infinite-scroll (ionInfinite)="hymnsInfinite($event)">
+                <ion-infinite-scroll-content></ion-infinite-scroll-content>
+            </ion-infinite-scroll> -->
+            <!-- <keyboard (outputChange)="handleKeyChange($event)" [(keyboardView)]="keyboardShow"></keyboard> -->
+        </div>
+        <div *ngSwitchCase="'bookmarks'">
+            <!--<ion-refresher (ionRefresh)="refreshBookmarks()">
+                <ion-refresher-content
+                    pullingIcon="arrow-dropdown"
+                    pullingText="Pull to refresh"
+                    refreshingSpinner="circles"
+                    refreshingText="Refreshing...">
+                </ion-refresher-content>
+            </ion-refresher>-->
+            <ion-searchbar (ionInput)="filterHymns($event)" [showCancelButton]="true" placeholder="Search bookmarks" type="number" [(ngModel)]="bkmkFilterText" #bkmkFilter></ion-searchbar>
+            <ion-list>
+                <ion-item-sliding *ngFor="let bkmk of bookmarkList">
+                    <ion-item (click)="setActiveHymn(bkmk['hymnId'])">
+                        <h2>{{ bkmk['firstLine'] }}</h2>
+                        <p>Hymn #{{ bkmk['title'] }}</p>
+                    </ion-item>
+                    <ion-item-options side="left">
+                        <button ion-button color="danger" (click)="presentConfirmUnbookmark(bkmk['hymnId'])">
+                            <ion-icon name="close"></ion-icon>
+                            Remove
+                        </button>
+                    </ion-item-options>
+                </ion-item-sliding>
+            </ion-list>
+        </div>
+        <div *ngSwitchCase="'recent'">
+            <!--<ion-refresher (ionRefresh)="refreshRecent()">
+                <ion-refresher-content
+                    pullingIcon="arrow-dropdown"
+                    pullingText="Pull to refresh"
+                    refreshingSpinner="circles"
+                    refreshingText="Refreshing...">
+                </ion-refresher-content>
+            </ion-refresher>-->
+            <ion-list>
+                <ion-item *ngFor="let recent of recentList" (click)="setActiveHymn(recent['hymnId'])">
+                    <h2>Hymn #{{ recent.hymnNumber }}</h2>
+                    <p>{{ recent.firstLine }}</p>
+                </ion-item>
+            </ion-list>
+        </div>
+    </div>
+</ion-content>

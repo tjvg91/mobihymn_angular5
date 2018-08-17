@@ -1,0 +1,13 @@
+page-settings-popover {
+    max-height: 29em;
+    display: block;
+    min-height: 23em;
+    ion-content{
+        height: inherit;
+        min-height: inherit;
+        .scroll-content{
+            height: inherit;
+            min-height: inherit;
+        }
+    }
+}

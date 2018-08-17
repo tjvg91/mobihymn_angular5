@@ -1,0 +1,161 @@
+@mixin verse-without-refrain {
+    @for $i from 2 through 10 {
+        .hymn-stanza+.hymn-stanza:nth-child(#{$i}):before {
+            content: quote("Stanza #{$i}:");
+        }
+    }
+}
+
+@mixin verse-with-refrain {
+    @for $i from 2 through 10 {
+        .hymn-refrain+.hymn-stanza:nth-child(#{$i * 2 - 1}):before {
+            content: quote("Stanza #{$i}:");
+        }
+    }
+}
+
+page-reader {
+    #settings {
+        font-size: 1.5em !important;
+    }
+    ion-header {
+        .bar-button-ios {
+            color: #000000;
+        }
+    }
+    ion-content {
+        user-select: text !important;
+        touch-action: pan-y !important;
+        &.theme-pic {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/Congregation%20Singing.jpg');
+            background-size: cover;
+            color: map-get($colors, 'light');
+            .hymn-line::selection,
+            .first-letter::selection {
+                background-color: map-get($colors, 'primary');
+                color: map-get($colors, 'dark');
+            }
+        }
+        &.theme-light {
+            background: map-get($colors, 'light');
+            color: map-get($colors, 'dark');
+            .hymn-line::selection,
+            .first-letter::selection {
+                background-color: map-get($colors, 'dark');
+                color: map-get($colors, 'primary');
+            }
+        }
+        &.theme-tan {
+            background: map-get($colors, 'semi');
+            color: map-get($colors, 'dark');
+            .hymn-line::selection,
+            .first-letter::selection {
+                background-color: map-get($colors, 'dark');
+                color: map-get($colors, 'primary');
+            }
+        }
+        &.theme-black {
+            background: #000000;
+            color: map-get($colors, 'light');
+            .hymn-line::selection,
+            .first-letter::selection {
+                background-color: map-get($colors, 'primary');
+                color: map-get($colors, 'dark');
+            }
+        }
+        &.theme-dark {
+            background: map-get($colors, 'dark-2');
+            color: map-get($colors, 'light');
+            .hymn-line::selection,
+            .first-letter::selection {
+                background-color: map-get($colors, 'primary');
+                color: map-get($colors, 'dark');
+            }
+        }
+        .hymn-content {
+            margin-bottom: 20px;
+            user-select: inherit !important;
+            touch-action: pan-y !important;
+            .hymn-title {
+                margin-bottom: 20px;
+                font-size: inherit;
+                h2 {
+                    display: inline;
+                }
+            }
+            .lyrics {
+                touch-action: pan-y !important;
+                .hymn-stanza {
+                    display: block;
+                    margin-bottom: 1em;
+                    user-select: text !important;
+                    .hymn-line {
+                        display: block;
+                        line-height: 125%;
+                        user-select: text !important;
+                    }
+                }
+                .hymn-refrain {
+                    display: block;
+                    margin-bottom: 20px;
+                    user-select: text !important;
+                    .hymn-line {
+                        display: block;
+                        line-height: 125%;
+                        user-select: text !important;
+                    }
+                }
+                .hymn-stanza:before {
+                    display: block;
+                }
+                .hymn-refrain:before {
+                    display: block;
+                    content: "Refrain:";
+                }
+                .hymn-stanza:nth-child(1):before {
+                    content: "Stanza 1:";
+                }
+            }
+        }
+        
+        [ion-fab]{
+            ion-icon{
+                font-size: 2.6em;
+            }
+            .musical-note{
+                position: absolute;
+                top: -3px;
+                font-size: 11px;
+                left: 22px;
+            }
+        }
+    }
+    ion-footer {
+        .toolbar-background {
+            background: map-get($colors, 'dark') !important;
+            border-bottom: 2px solid #000000 !important;
+        }
+        .toolbar-content {
+            display: flex;
+            align-items: center;
+
+            ion-range{
+                flex-grow: 2;
+
+                .range-knob-handle .range-knob{
+                    background: map-get($colors, 'light') !important;
+                }
+            }
+            ion-label {
+                color: map-get($colors, 'light') !important;
+            }
+        }
+    }
+}
+
+ion-list-header ion-label ion-badge {
+    float: right;
+}
+
+@include verse-without-refrain;
+@include verse-with-refrain;

@@ -1,0 +1,71 @@
+<!--
+  Generated template for the ReaderPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header #readerHeader [@slideUp]="slideUpState">
+  <ion-navbar color="dark">
+      <ion-buttons start>
+            <button ion-button (tap)="goBack()" *ngIf="canBack">
+                <ion-icon name="arrow-back"></ion-icon>
+            </button>
+      </ion-buttons>
+      <ion-title>MobiHymn</ion-title>
+      <ion-buttons end>
+          <button ion-button icon-only (tap)="toggleBookmark()">
+              <ion-icon name="star-outline" *ngIf="!isBookmarked"></ion-icon>
+              <ion-icon name="star" *ngIf="isBookmarked"></ion-icon>
+          </button>
+          <button ion-button icon-only (tap)="presentPopover($event)" id="settings">
+              <span class="fa fa-font"></span>
+          </button>
+      </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding #lyricsContainer class="{{ 'theme-' + themeString }}">
+  <div class="hymn-content" *ngIf="currentHymn" (pinchmove)="pinchZoom($event)" (pinchend)="curScale = 0" [ngStyle]="{'paddingBottom.px': extraSpace, 'text-align': alignment, 'fontSize.em': fontSize, 'fontFamily': fontName}">
+      <div class="hymn-title">
+          <h2 class="hymn-title" (click)="presentTunePopover($event)">
+              Hymn #{{ currentHymn.title }}
+          </h2>
+      </div>
+      <div class="lyrics" [innerHTML]="currentHymn.lyrics" (tap)="toggleFullLyrics($event)">
+      </div>
+  </div>
+
+  <ion-fab bottom right>
+      <button ion-fab [@scale]="scaleState" (click)="presentInputModal()">
+          <ion-icon name="search"></ion-icon>
+          <span class="musical-note">&#9834;</span>
+      </button>
+  </ion-fab>
+</ion-content>
+
+<ion-footer #footerReader>
+  <ion-toolbar>
+      <button ion-button clear (tap)="playTrack()" *ngIf="mdiPlayer && mdiSound && !mdiPlayer.isPlaying()" [disabled]="currentHymn && !currentHymn['midi']">
+          <ion-icon name="play"></ion-icon>
+      </button>
+      <button ion-button clear (tap)="pauseTrack()" *ngIf="mdiPlayer && mdiSound && mdiPlayer.isPlaying()" [disabled]="currentHymn && !currentHymn['midi']">
+          <ion-icon name="pause"></ion-icon>
+      </button>
+      <button ion-button clear *ngIf="!mdiSound">
+          <span class="fa fa-spinner fa-pulse fa-2x"></span>
+      </button>
+
+      <button ion-button clear (tap)="stopTrack()" *ngIf="mdiPlayer && mdiSound" [disabled]="!mdiPlayer" [disabled]="currentHymn && !currentHymn['midi']">
+          <ion-icon name="square"></ion-icon>
+      </button>
+
+      <ion-range [max]="mdiLength" [(ngModel)]="mdiCur" step="1" (panend)="mdiChange($event)" (tap)="mdiChange($event)">
+          <ion-label range-left small>{{ secsToMins(mdiCur) }}</ion-label>
+          <ion-label range-right small>{{ secsToMins(mdiLength) }}</ion-label>
+      </ion-range>
+
+      <button ion-button clear (tap)="presentMidiPopover($event)" [disabled]="currentHymn && !currentHymn['midi']">
+          <span class="fa fa-sliders fa-2x"></span>
+      </button>
+  </ion-toolbar>
+</ion-footer>

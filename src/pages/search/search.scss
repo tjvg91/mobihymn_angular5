@@ -1,0 +1,16 @@
+page-search {
+    ion-list-header {
+        margin: 0 !important;
+    }
+    ion-searchbar {
+        position: fixed;
+        top: 50px;
+        left: 0;
+        z-index: 5;
+        background: #000 !important;
+        padding: 18px 8px 8px;
+    }
+    ion-list {
+        padding: 50px 0 0;
+    }
+}
