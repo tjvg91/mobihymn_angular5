@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core';
-import { IntroSliderComponent } from './intro-slider/intro-slider';
+import { KeyboardComponent } from './keyboard/keyboard';
 @NgModule({
-	declarations: [IntroSliderComponent],
+	declarations: [ KeyboardComponent ],
 	imports: [CommonModule],
-	exports: [IntroSliderComponent]
+	exports: [ KeyboardComponent ]
 })
 export class ComponentsModule {}

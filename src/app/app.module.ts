@@ -22,6 +22,7 @@ import { TunePopoverPage } from '../pages/tune-popover/tune-popover';
 import { AuthorModalPage } from '../pages/author-modal/author-modal';
 import { RevisionsModalPage } from '../pages/revisions-modal/revisions-modal';
 import { AboutPage } from '../pages/about/about';
+import { ImageMakerPage } from '../pages/image-maker/image-maker';
 import { IntroSliderComponent } from '../components/intro-slider/intro-slider';
 import { GlobalService } from '../services/global-service';
 import { UserService } from '../services/user-service';
@@ -50,6 +51,7 @@ import { Network } from '@ionic-native/network';
     AuthorModalPage,
     RevisionsModalPage,
     AboutPage,
+    ImageMakerPage,
     IntroSliderComponent,
     TabsPage
   ],
@@ -76,6 +78,7 @@ import { Network } from '@ionic-native/network';
     AuthorModalPage,
     RevisionsModalPage,
     AboutPage,
+    ImageMakerPage,
     TunePopoverPage,
     IntroSliderComponent,
     TabsPage
