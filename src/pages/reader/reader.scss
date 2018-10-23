@@ -22,6 +22,21 @@ page-reader {
         .bar-button-ios {
             color: #000000;
         }
+        .toolbar{
+            min-height:46px;
+
+            .toolbar-title-container{
+            }
+            .tune-switcher{
+                color: map-get($colors, 'dark');
+            }
+        }
+        .caret{
+            width: 21px;
+            height: 14px;
+            padding: 0;
+            margin-top: -7px;
+        }
     }
     ion-content {
         user-select: text !important;
@@ -76,13 +91,6 @@ page-reader {
             margin-bottom: 20px;
             user-select: inherit !important;
             touch-action: pan-y !important;
-            .hymn-title {
-                margin-bottom: 20px;
-                font-size: inherit;
-                h2 {
-                    display: inline;
-                }
-            }
             .lyrics {
                 touch-action: pan-y !important;
                 .hymn-stanza {
@@ -138,6 +146,14 @@ page-reader {
         .toolbar-content {
             display: flex;
             align-items: center;
+
+            > ion-buttons{
+                width: 100%;
+                display: flex;
+                button{
+                    flex-grow: 1;
+                }
+            }
 
             ion-range{
                 flex-grow: 2;

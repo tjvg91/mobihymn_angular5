@@ -211,6 +211,7 @@ export class HomePage implements OnDestroy{
     });
     this.myGlobal.firebaseAuth.onAuthStateChanged(function(user){
       if(user){
+        hom.fetching = true;
         hom.getHymnalsFirebase().then(function(url){
           var newUrl = hom.platform.is('cordova') ? url :
                       url.replace(hom.firebaseRegEx, hom.firebaseStorage);

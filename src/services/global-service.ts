@@ -240,12 +240,13 @@ export class GlobalService {
 
     getHymnals(http: Http){
         let url = "";
-        if(this.platform.is('android'))
-            url = this.file.externalRootDirectory + 'MobiHymn/hymnals.json';
+        console.log(this.file)
+        if(!this.platform.is('cordova'))
+            url = '../assets/hymnals/hymnals.json';
+        else if(this.platform.is('android'))
+            url = this.file.externalRootDirectory + '/MobiHymn/hymnals.json';
         else if(this.platform.is('ios'))
-            url = this.file.documentsDirectory + 'MobiHymn/hymnals.json';
-        else
-            url = '../assets/hymnals.json';
+            url = this.file.documentsDirectory + '/MobiHymn/hymnals.json';
         return http.get(url).map(res => res.json());
     }
 

@@ -11,7 +11,12 @@
                 <ion-icon name="arrow-back"></ion-icon>
             </button>
       </ion-buttons>
-      <ion-title>MobiHymn</ion-title>
+      <ion-title *ngIf="currentHymn && currentHymn.title">
+         <span (tap)="presentInputModal()">Hymn #{{ currentHymn.title }}</span>
+         <button ion-button clear (tap)="presentTunePopover($event)" *ngIf="tunes.length > 0" class="caret">
+            <ion-icon name="arrow-dropdown"></ion-icon>
+         </button>
+      </ion-title>
       <ion-buttons end>
           <button ion-button icon-only (tap)="toggleBookmark()">
               <ion-icon name="star-outline" *ngIf="!isBookmarked"></ion-icon>
@@ -26,46 +31,58 @@
 
 <ion-content padding #lyricsContainer class="{{ 'theme-' + themeString }}">
   <div class="hymn-content" *ngIf="currentHymn" (pinchmove)="pinchZoom($event)" (pinchend)="curScale = 0" [ngStyle]="{'paddingBottom.px': extraSpace, 'text-align': alignment, 'fontSize.em': fontSize, 'fontFamily': fontName}">
-      <div class="hymn-title">
-          <h2 class="hymn-title" (click)="presentTunePopover($event)">
-              Hymn #{{ currentHymn.title }}
-          </h2>
-      </div>
       <div class="lyrics" [innerHTML]="currentHymn.lyrics" (tap)="toggleFullLyrics($event)">
       </div>
   </div>
-
-  <ion-fab bottom right>
-      <button ion-fab [@scale]="scaleState" (click)="presentInputModal()">
-          <ion-icon name="search"></ion-icon>
-          <span class="musical-note">&#9834;</span>
-      </button>
-  </ion-fab>
 </ion-content>
 
 <ion-footer #footerReader>
-  <ion-toolbar>
-      <button ion-button clear (tap)="playTrack()" *ngIf="mdiPlayer && mdiSound && !mdiPlayer.isPlaying()" [disabled]="currentHymn && !currentHymn['midi']">
-          <ion-icon name="play"></ion-icon>
-      </button>
-      <button ion-button clear (tap)="pauseTrack()" *ngIf="mdiPlayer && mdiSound && mdiPlayer.isPlaying()" [disabled]="currentHymn && !currentHymn['midi']">
-          <ion-icon name="pause"></ion-icon>
-      </button>
-      <button ion-button clear *ngIf="!mdiSound">
-          <span class="fa fa-spinner fa-pulse fa-2x"></span>
-      </button>
-
-      <button ion-button clear (tap)="stopTrack()" *ngIf="mdiPlayer && mdiSound" [disabled]="!mdiPlayer" [disabled]="currentHymn && !currentHymn['midi']">
-          <ion-icon name="square"></ion-icon>
-      </button>
-
-      <ion-range [max]="mdiLength" [(ngModel)]="mdiCur" step="1" (panend)="mdiChange($event)" (tap)="mdiChange($event)">
-          <ion-label range-left small>{{ secsToMins(mdiCur) }}</ion-label>
-          <ion-label range-right small>{{ secsToMins(mdiLength) }}</ion-label>
-      </ion-range>
-
-      <button ion-button clear (tap)="presentMidiPopover($event)" [disabled]="currentHymn && !currentHymn['midi']">
-          <span class="fa fa-sliders fa-2x"></span>
-      </button>
+  <ion-toolbar [ngSwitch]="footerType">
+      <ion-buttons *ngSwitchDefault>
+         <button ion-button clear color="primary" (tap)="footerType = 'player'">player</button>
+         <button ion-button clear color="primary" (tap)="footerType = 'scroller'">scroller</button>
+      </ion-buttons>
+      <ng-container *ngSwitchCase="'player'">
+         <button ion-button clear (tap)="footerType = ''">
+            <ion-icon name="arrow-dropleft-circle"></ion-icon>
+         </button>
+         <button ion-button clear (tap)="playTrack()" *ngIf="mdiPlayer && mdiSound && !mdiPlayer.isPlaying()" [disabled]="currentHymn && !currentHymn['midi']">
+            <ion-icon name="play"></ion-icon>
+         </button>
+         <button ion-button clear (tap)="pauseTrack()" *ngIf="mdiPlayer && mdiSound && mdiPlayer.isPlaying()" [disabled]="currentHymn && !currentHymn['midi']">
+            <ion-icon name="pause"></ion-icon>
+         </button>
+         <button ion-button clear *ngIf="!mdiSound">
+            <span class="fa fa-spinner fa-pulse fa-2x"></span>
+         </button>
+   
+         <button ion-button clear (tap)="stopTrack()" *ngIf="mdiPlayer && mdiSound" [disabled]="!mdiPlayer" [disabled]="currentHymn && !currentHymn['midi']">
+            <ion-icon name="square"></ion-icon>
+         </button>
+   
+         <ion-range [max]="mdiLength" [(ngModel)]="mdiCur" step="1" (panend)="mdiChange($event)" (tap)="mdiChange($event)">
+            <ion-label range-left small>{{ secsToMins(mdiCur) }}</ion-label>
+            <ion-label range-right small>{{ secsToMins(mdiLength) }}</ion-label>
+         </ion-range>
+   
+         <button ion-button clear (tap)="presentMidiPopover($event)" [disabled]="currentHymn && !currentHymn['midi']">
+            <span class="fa fa-sliders fa-2x"></span>
+         </button>
+      </ng-container>
+      <ng-container *ngSwitchCase="'scroller'">
+         <button ion-button clear (tap)="footerType = ''">
+            <ion-icon name="arrow-dropleft-circle"></ion-icon>
+         </button>
+         <button ion-button clear (tap)="playScroll()" [disabled]="" *ngIf="!scrollInterval">
+            <ion-icon name="play"></ion-icon>
+         </button>
+         <button ion-button clear (tap)="pauseScroll()" *ngIf="scrollInterval">
+            <ion-icon name="pause"></ion-icon>
+         </button>
+         <ion-range [max]="10" [(ngModel)]="scrollCur" step="1" (panend)="scrollChange($event)" (tap)="scrollChange($event)">
+            <ion-label range-left small>{{scrollCur}}</ion-label>
+            <ion-label range-right small>10</ion-label>
+         </ion-range>
+      </ng-container>
   </ion-toolbar>
 </ion-footer>
