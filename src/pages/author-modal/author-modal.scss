@@ -14,7 +14,9 @@ page-author-modal {
     .disclaimer{
         position: absolute;
         bottom: 10px;        
-        left: 20px;
+        left: 5%;
         font-style: italic;
+        width: 90%;
+        word-break: break-all;
     }
 }

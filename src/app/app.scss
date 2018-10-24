@@ -127,6 +127,32 @@
     }
 }
 
+.card-background-page {
+    ion-card {
+      position: relative;
+      text-align: center;
+
+      .card-title {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-75%);
+        font-size: 1.5em;
+        width: 100%;
+        font-weight: bold;
+        color: #fff;
+      }
+    
+      .card-subtitle {
+        font-size: 0.8em;
+        position: absolute;
+        top: 50%;
+        transform: translateY(75%);
+        width: 100%;
+        color: #fff;
+      }
+    }
+  }
+
 ion-header ion-navbar[color="dark"]{
     ion-title .toolbar-title{
         color: #ffeb3b;

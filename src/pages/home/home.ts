@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, HostListener } from '@angular/core';
 import { Http } from '@angular/http';
 import { NavController, Platform, LoadingController, AlertController, ModalController } from 'ionic-angular';
 import { GlobalService } from '../../services/global-service';
@@ -39,6 +39,7 @@ export class HomePage implements OnDestroy{
   android: boolean;
   ios: boolean;  
   wp: boolean;
+  desktop: boolean;
 
   canBack: boolean;
   
@@ -117,10 +118,17 @@ export class HomePage implements OnDestroy{
     this.android = platform.is('android');
     this.ios = platform.is('ios');
     this.wp = platform.is('wp');
+    this.desktop = window.innerWidth >= 1024 && !this.platform.is('cordova');
 
     this.storage = this.android ? file.externalRootDirectory : file.documentsDirectory;
 
     this.showLogin();
+  }
+
+  
+  @HostListener('window:resize')
+  onResize(){
+    this.desktop = window.innerWidth >= 1024 && !this.platform.is('cordova');
   }
   
   setActiveHymnal(hymnalId : string){
