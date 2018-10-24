@@ -82,7 +82,7 @@ page-reader {
             }
         }
         &.theme-tan {
-            background: map-get($colors, 'semi');
+            background: map-get($colors, 'primary');
             color: map-get($colors, 'dark');
             .hymn-line::selection,
             .first-letter::selection {

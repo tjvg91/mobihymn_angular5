@@ -89,6 +89,11 @@ export class GlobalService {
         this.hymnalChange.next(this.hymnals);
     }
 
+    addToHymnals(newValue: Array<object>){
+        this.hymnals = this.hymnals.concat(newValue);
+        this.hymnalChange.next(this.hymnals);
+    }
+
     addToHymns(propName: string, newValue:Array<object>) {        
         this.hymns[propName] = newValue;        
         this.hymnChange.next(this.hymns);

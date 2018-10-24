@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Platform, App } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -81,6 +81,16 @@ export class MyApp{
         }
       })
     }
+    else{
+      this.checkSettings("read");
+    }
+  }
+
+  @HostListener('window:beforeunload')
+  onBeforeUnload(){
+    if(!this.platform.is('cordova')){
+      this.writeSettings(null);
+    }
   }
 
   checkBookmarks(mode: string){
@@ -151,12 +161,12 @@ export class MyApp{
     var data = this.global.getRecentList();
     if(!exists)
       this.file.writeFile(this.storage + '/' + this.MAIN_FOLDER_NAME, this.HISTORY_JSON_NAME,
-                          JSON.stringify(data), {
-                            append: false, replace: true
-                          });
+        JSON.stringify(data), {
+          append: false, replace: true
+      });
     else
       this.file.writeExistingFile(this.storage + '/' + this.MAIN_FOLDER_NAME, this.HISTORY_JSON_NAME,
-                          JSON.stringify(data));
+        JSON.stringify(data));
   }
 
   readHistory(){
@@ -167,27 +177,37 @@ export class MyApp{
   }
 
   checkSettings(mode: string){
-    let path = this.storage + '/' + this.MAIN_FOLDER_NAME;
-    let filename = this.SETTINGS_JSON_NAME
-    this.file.checkFile(path, filename).then(() => {
-      if(mode == "write")
-        this.writeSettings(true);
-      else
-        this.readSettings();
-    }).catch(err => {
-      if(err.message = "PATH_EXISTS_ERR"){
-        if(mode == "read")
-          this.readSettings();
-        else
+    if(this.platform.is('cordova')){
+      let path = this.storage + '/' + this.MAIN_FOLDER_NAME;
+      let filename = this.SETTINGS_JSON_NAME
+      this.file.checkFile(path, filename).then(() => {
+        if(mode == "write")
           this.writeSettings(true);
+        else
+          this.readSettings();
+      }).catch(err => {
+        if(err.message = "PATH_EXISTS_ERR"){
+          if(mode == "read")
+            this.readSettings();
+          else
+            this.writeSettings(true);
+        }
+        else{
+          this.file.createFile(path, filename, false).then(() => {
+            if(mode = "write")
+              this.writeSettings(false);
+          })
+        }
+      })
+    }
+    else{
+      if(mode == "read"){
+        this.readSettings();
       }
-      else{
-        this.file.createFile(path, filename, false).then(() => {
-          if(mode = "write")
-            this.writeSettings(false);
-        })
+      else if(mode == "write"){
+        this.writeSettings(null);
       }
-    })
+    }
   }
 
   writeSettings(exists: boolean){
@@ -219,7 +239,7 @@ export class MyApp{
   }
 
   readSettings(){
-    if(this.platform.is('cordoa')){
+    if(this.platform.is('cordova')){
       this.file.readAsText(this.storage + '/' + this.MAIN_FOLDER_NAME, this.SETTINGS_JSON_NAME).then((data) => {
         this.mapSettings(data);
       });

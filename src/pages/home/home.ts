@@ -66,6 +66,14 @@ export class HomePage implements OnDestroy{
               return obj1['id'] == obj2['id'];
           });
         });
+      
+      if(this.activeHymnal){
+        var tempAct = this.hymnalList.filter(x => {
+          return x['id'] == hom.activeHymnal;
+        })
+        if(tempAct.length > 0)
+          this.setActiveHymnal(this.activeHymnal);
+      }
     });
 
     this.activeHymnalSubscribe = global.activeHymnalChange.subscribe(val => {
@@ -130,9 +138,10 @@ export class HomePage implements OnDestroy{
 
   ionViewDidLoad(){
     this.canBack = this.homeCtrl.parent._selectHistory.length > 0;
-    this.getFBHymnalsDateModified(); 
+    this.getFBHymnalsDateModified();
+    this.activeHymnal = this.myGlobal.getActiveHymnal();
     if(this.platform.is('cordova')){
-      this.activeHymnal = this.myGlobal.getActiveHymnal();
+      
       this.isCordova = true;
       this.network.onConnect().subscribe(data => {
         this.isOnline = true;
@@ -216,7 +225,7 @@ export class HomePage implements OnDestroy{
           var newUrl = hom.platform.is('cordova') ? url :
                       url.replace(hom.firebaseRegEx, hom.firebaseStorage);
           hom.myHttp.get(newUrl).map(x => x.json()).subscribe(x => {
-            hom.myGlobal.setHymnals(x.output);
+            hom.myGlobal.addToHymnals(x.output);
             hom.fetching = false;
           });
         }).catch(function(err){
