@@ -1,14 +1,30 @@
 @mixin verse-without-refrain {
     @for $i from 2 through 10 {
-        .hymn-stanza+.hymn-stanza:nth-child(#{$i}):before {
+        .show-stanza .hymn-stanza+.hymn-stanza:nth-child(#{$i}):before {
             content: quote("Stanza #{$i}:");
+        }
+    }
+}
+
+@mixin verse {
+    @for $i from 1 through 1 {
+        .show-stanza .hymn-stanza:before {
+            content: quote("Stanza #{$i}:");
+        }
+    }
+}
+
+@mixin refrain {
+    @for $i from 1 through 1 {
+        .show-stanza .hymn-refrain:before {
+            content: quote("Refrain:");
         }
     }
 }
 
 @mixin verse-with-refrain {
     @for $i from 2 through 10 {
-        .hymn-refrain+.hymn-stanza:nth-child(#{$i * 2 - 1}):before {
+        .show-stanza .hymn-refrain+.hymn-stanza:nth-child(#{$i * 2 - 1}):before {
             content: quote("Stanza #{$i}:");
         }
     }
@@ -36,6 +52,11 @@ page-reader {
             height: 14px;
             padding: 0;
             margin-top: -7px;
+        }
+        ion-title{
+            span{
+                text-decoration: underline;
+            }
         }
     }
     ion-content {
@@ -113,16 +134,6 @@ page-reader {
                         user-select: text !important;
                     }
                 }
-                .hymn-stanza:before {
-                    display: block;
-                }
-                .hymn-refrain:before {
-                    display: block;
-                    content: "Refrain:";
-                }
-                .hymn-stanza:nth-child(1):before {
-                    content: "Stanza 1:";
-                }
             }
         }
         
@@ -175,3 +186,5 @@ ion-list-header ion-label ion-badge {
 
 @include verse-without-refrain;
 @include verse-with-refrain;
+@include verse;
+@include refrain;

@@ -27,6 +27,7 @@ export class GlobalService {
     fontSize: number = 1.4;
     fontName: string = "Roboto"
     theme: string = "pic";
+    showStanza: boolean = true;
     public instrument: Object = {
         "name" : "piano",
         "value": "acoustic_grand_piano-mp3"
@@ -56,6 +57,7 @@ export class GlobalService {
     public fontNameChange : Subject<string> = new Subject<string>();
     public themeChange : Subject<string> = new Subject<string>();
     public soundFontChange: Subject<object> = new Subject<object>();
+    public showStanzaChange: Subject<boolean> = new Subject<boolean>();
 
     constructor(private file: File, private platform: Platform) {
         this.fireConfig = {
@@ -186,6 +188,11 @@ export class GlobalService {
         this.soundFontChange.next(newValue);
     }
 
+    setShowStanza(newValue: boolean){
+        this.showStanza = newValue;
+        this.showStanzaChange.next(newValue);
+    }
+
     getHymnalList() : Array<object>{
         return this.hymnals;
     }
@@ -270,6 +277,10 @@ export class GlobalService {
         url += 'assets/js/soundfonts/acoustic_grand_piano-mp3.js';
         this.ac = new AudioContext();
         return SoundFont.instrument(this.ac, url);
+    }
+
+    getShowStanza(){
+        return this.showStanza;
     }
 
     isInBookmark(hymnalId, hymnId){

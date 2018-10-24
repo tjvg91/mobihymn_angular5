@@ -115,8 +115,16 @@
     margin: 14px 8px 14px 0;
 }
 
-.popover-content{
-    max-height: 17em !important;
+.popover-ios{
+    .popover-content{
+        max-height: 315px !important;
+        width: 220px;
+    }
+}
+.popover-md{
+    .popover-content{
+        max-height: 290px !important;
+    }
 }
 
 ion-header ion-navbar[color="dark"]{

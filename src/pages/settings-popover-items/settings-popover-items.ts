@@ -32,7 +32,7 @@ export class SettingsPopoverItemsPage {
   alignments = ["left", "center", "right"];
   themes = ["light", "tan", "dark", "black", "pic"];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,) {
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.activeList = this.navParams.get('dest');
     this.global = this.navParams.get('global');
     this.data = JSON.parse(window.localStorage.getItem('data'));

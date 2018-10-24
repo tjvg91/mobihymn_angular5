@@ -68,12 +68,14 @@ export class ReaderPage implements OnDestroy{
   fontNameSubscribe: any;
   alignmentSubscribe: any;
   soundFontSubscribe: any;
+  showStanzaSubscribe: any;
 
   extraSpace: Number = 0;
   alignment: string = "left";
   fontSize: number = 1.4;
   themeString: string = "pic";
   fontName: string = "Roboto";
+  showStanza: boolean = true;
 
   curScale: number = 0;
   footerType: string = "";
@@ -161,13 +163,20 @@ export class ReaderPage implements OnDestroy{
     
     this.soundFontSubscribe = global.soundFontChange.subscribe((value) => {
       this.mdiSound = value;
+    });
+
+    this.showStanzaSubscribe = global.showStanzaChange.subscribe(value => {
+      this.showStanza = value;
     })
   }
 
   presentPopover(myEvent) {
     let popover = this.inputPopCtrl.create(SettingsPopoverPage,{
       ctrl: this,
-    }); 
+    });
+    popover.onDidDismiss(() => {
+      window.localStorage.removeItem('data');
+    })
     popover.present({
       ev: myEvent
     });
@@ -522,7 +531,7 @@ export class ReaderPage implements OnDestroy{
     let read = this;
     this.scrollInterval = setInterval(() => {
       read.scrollContent.scrollTop += read.scrollCur;
-      if(read.scrollContent.scrollTop + read.scrollContent.offsetHeight >= read.scrollContent.scrollHeight - 20){
+      if(read.scrollContent.scrollTop + read.scrollContent.offsetHeight >= read.scrollContent.scrollHeight - 5){
         clearInterval(read.scrollInterval)
         read.scrollInterval = 0;
         return;
@@ -541,7 +550,7 @@ export class ReaderPage implements OnDestroy{
       this.scrollInterval = 0;
       this.scrollInterval = setInterval(() => {
         read.scrollContent.scrollTop += (read.scrollCur);
-        if(read.scrollContent.scrollTop + read.scrollContent.offsetHeight >= read.scrollContent.scrollHeight - 20){
+        if(read.scrollContent.scrollTop + read.scrollContent.offsetHeight >= read.scrollContent.scrollHeight - 5){
           clearInterval(read.scrollInterval)
           read.scrollInterval = 0;
           return;

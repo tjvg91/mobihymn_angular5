@@ -18,6 +18,10 @@
         {{ setting }}
         <ion-icon name="arrow-forward"></ion-icon>
     </ion-item>
+    <ion-item *ngIf="setting">
+      <ion-label>Show Stanza</ion-label>
+      <ion-toggle [(ngModel)]="setting.showStanza" (ionChange)="showStanzaChange($event)"></ion-toggle>
+    </ion-item>
   </ion-list>
   <!--<button ion-button (click)="alert('clicked');">Test</button>-->
 </ion-content>
