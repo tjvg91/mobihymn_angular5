@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { WalkthroughFlowComponent } from 'angular-walkthrough'
 
 import { IonicPage, NavController, PopoverController, ModalController, AlertController, ToastController, Gesture, Content, Platform } from 'ionic-angular';
 import { GlobalService } from '../../services/global-service';
@@ -94,6 +95,7 @@ export class ReaderPage implements OnDestroy{
   @ViewChild('readerHeader') divHeader: ElementRef;
   @ViewChild('lyricsContainer') lyricsContainerRef: Content;
   @ViewChild('footerReader') footerReader: ElementRef;
+  @ViewChild('walkFlow1') walkFlow1: WalkthroughFlowComponent;
   scrollContent: any;
   divTab: any;
 
@@ -285,6 +287,7 @@ export class ReaderPage implements OnDestroy{
       return val['id'] == activeHymnal;
     })[0]['image'];
     this.mdiControl['track'] = "Hymn #" + this.currentHymn['title'];
+    this.walkFlow1.start();
   }
 
   ngOnDestroy(){

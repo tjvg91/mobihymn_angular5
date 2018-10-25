@@ -12,7 +12,7 @@
             </button>
       </ion-buttons>
       <ion-title *ngIf="currentHymn && currentHymn.title">
-         <span (tap)="presentInputModal()">Hymn #{{ currentHymn.title }}</span>
+         <span (tap)="presentInputModal()" id="hymnTitle">Hymn #{{ currentHymn.title }}</span>
          <button ion-button clear (tap)="presentTunePopover($event)" *ngIf="tunes.length > 0" class="caret">
             <ion-icon name="arrow-dropdown"></ion-icon>
          </button>
@@ -34,6 +34,19 @@
       <div class="lyrics" [innerHTML]="currentHymn.lyrics" (tap)="toggleFullLyrics($event)" [ngClass]="{'show-stanza': showStanza}">
       </div>
   </div>
+  <ng-walkthrough-flow
+      focusBackdrop="true"
+      focusHighlightAnimation="true"
+      closeButton="true"
+      closeAnywhere="false"
+      showArrow="true"
+      radius="auto" #walkFlow1>
+      <ng-walkthrough id="walk-to-title"
+         focusElementSelector="#hymnTitle"
+         contentText="Tap to browse hymns in the hymnal">
+
+      </ng-walkthrough>
+    </ng-walkthrough-flow>
 </ion-content>
 
 <ion-footer #footerReader>
@@ -86,3 +99,4 @@
       </ng-container>
   </ion-toolbar>
 </ion-footer>
+
