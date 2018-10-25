@@ -566,4 +566,8 @@ export class ReaderPage implements OnDestroy{
     let prevTab = this.readerCtrl.parent.previousTab(true);
     this.readerCtrl.parent.select(prevTab);
   }
+
+  catchHighlightedText(){
+    console.log(window.getSelection().toString());
+  }
 }

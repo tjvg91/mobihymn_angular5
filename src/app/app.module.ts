@@ -7,6 +7,9 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { WalkthroughModule } from 'angular-walkthrough';
 import { Pro } from "@ionic/pro";
+// import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+// import { library } from '@fortawesome/fontawesome-svg-core';
+// import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import { TabsPage } from '../pages/tabs/tabs';
 import { ReaderPage } from '../pages/reader/reader';
@@ -61,6 +64,8 @@ export class MyErrorHandler implements ErrorHandler {
   }
 }
 
+//library.add(faSpinner);
+
 @NgModule({
   declarations: [
     MyApp,
@@ -88,7 +93,8 @@ export class MyErrorHandler implements ErrorHandler {
     HttpModule,
     BrowserAnimationsModule,
     WalkthroughModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    //FontAwesomeModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -120,8 +126,7 @@ export class MyErrorHandler implements ErrorHandler {
     FileTransfer,
     Insomnia,
     Network,
-    IonicErrorHandler,
-    {provide: ErrorHandler, useClass: MyErrorHandler},
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })
 export class AppModule {}
