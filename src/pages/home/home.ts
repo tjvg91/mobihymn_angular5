@@ -42,8 +42,8 @@ export class HomePage implements OnDestroy{
   desktop: boolean;
 
   canBack: boolean;
-  
   storage: string;
+  index: any;
 
   fbHymnalsDateModified: Number;
   userHymnalsDateModified: Number;
