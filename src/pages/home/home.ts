@@ -40,6 +40,7 @@ export class HomePage implements OnDestroy{
   ios: boolean;  
   wp: boolean;
   desktop: boolean;
+  tab: boolean;
 
   canBack: boolean;
   storage: string;
@@ -119,6 +120,7 @@ export class HomePage implements OnDestroy{
     this.ios = platform.is('ios');
     this.wp = platform.is('wp');
     this.desktop = window.innerWidth >= 1024 && !this.platform.is('cordova');
+    this.tab = window.innerWidth < 1024 && window.innerWidth >= 768;
 
     this.storage = this.android ? file.externalRootDirectory : file.documentsDirectory;
 
@@ -129,6 +131,7 @@ export class HomePage implements OnDestroy{
   @HostListener('window:resize')
   onResize(){
     this.desktop = window.innerWidth >= 1024 && !this.platform.is('cordova');
+    this.tab = window.innerWidth < 1024 && window.innerWidth >= 768;
   }
   
   setActiveHymnal(hymnalId : string){

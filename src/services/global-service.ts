@@ -26,7 +26,7 @@ export class GlobalService {
     padding: Number=0;
     fontSize: number = 1.4;
     fontName: string = "Roboto"
-    theme: string = "pic";
+    theme: string = "light";
     showStanza: boolean = true;
     public instrument: Object = {
         "name" : "piano",

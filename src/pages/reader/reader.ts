@@ -37,7 +37,7 @@ import * as MidiPlayer from 'midi-player-js';
     ]),
     trigger('slideUp', [
       state('up', style({
-        transform: 'translate(0px, -43px)'
+        transform: 'translate(0px, -50px)'
       })),
       state('down', style({
         transform: 'translate(0px, 0px)'
@@ -550,7 +550,7 @@ export class ReaderPage implements OnDestroy{
   scrollChange(event){
     let read = this;
     if(this.scrollInterval){
-      this.scrollInterval = 0;
+      clearInterval(read.scrollInterval);
       this.scrollInterval = setInterval(() => {
         read.scrollContent.scrollTop += (read.scrollCur);
         if(read.scrollContent.scrollTop + read.scrollContent.offsetHeight >= read.scrollContent.scrollHeight - 5){

@@ -28,7 +28,7 @@ export class SettingsPopoverItemsPage {
 
   fontSizes: Array<number> = [1.4, 1.9, 2.4, 2.9, 3.4];
   fontNames: Array<string> = ["Roboto", "Cookie", "Cormorant", "EB Garamond", "Give You Glory",
-                              "Princess Sofia", "Redressed", "Dekko"]
+                              "Redressed", "Dekko", "Nuecha"]
   alignments = ["left", "center", "right"];
   themes = ["light", "tan", "dark", "black", "pic"];
 
