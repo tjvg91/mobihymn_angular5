@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { WalkthroughFlowComponent } from 'angular-walkthrough'
 
 import { IonicPage, NavController, PopoverController, ModalController, AlertController, ToastController, Gesture, Content, Platform } from 'ionic-angular';
 import { GlobalService } from '../../services/global-service';
@@ -36,7 +37,7 @@ import * as MidiPlayer from 'midi-player-js';
     ]),
     trigger('slideUp', [
       state('up', style({
-        transform: 'translate(0px, -63px)'
+        transform: 'translate(0px, -50px)'
       })),
       state('down', style({
         transform: 'translate(0px, 0px)'
@@ -68,14 +69,17 @@ export class ReaderPage implements OnDestroy{
   fontNameSubscribe: any;
   alignmentSubscribe: any;
   soundFontSubscribe: any;
+  showStanzaSubscribe: any;
 
   extraSpace: Number = 0;
   alignment: string = "left";
   fontSize: number = 1.4;
   themeString: string = "pic";
   fontName: string = "Roboto";
+  showStanza: boolean = true;
 
   curScale: number = 0;
+  footerType: string = "";
 
   mdiPlayer: any;
   mdiLength: any = 0;
@@ -83,10 +87,15 @@ export class ReaderPage implements OnDestroy{
   mdiSound: any;
   ac: AudioContext;
 
+  scrollCur: any = 0;
+  scrollInterval: any = 0;
+  scrollTime: number = 500;
+
   private lyricsContainer: HTMLElement;
   @ViewChild('readerHeader') divHeader: ElementRef;
   @ViewChild('lyricsContainer') lyricsContainerRef: Content;
   @ViewChild('footerReader') footerReader: ElementRef;
+  @ViewChild('walkFlow1') walkFlow1: WalkthroughFlowComponent;
   scrollContent: any;
   divTab: any;
 
@@ -124,8 +133,6 @@ export class ReaderPage implements OnDestroy{
         return new RegExp('^' + currentHymnNum + "(f|s|t)", "i").test(item['number']);
       });
       this.isBookmarked = global.isInBookmark(this.activeHymnal, this.currentHymn['id']);
-      this.scrollContent = this.lyricsContainerRef._elementRef.nativeElement.querySelector('.scroll-content');
-      this.scrollContent.scrollTop = 0;
       let read = this;
       setTimeout(function() {
         read.initializePlayer();
@@ -158,19 +165,26 @@ export class ReaderPage implements OnDestroy{
     
     this.soundFontSubscribe = global.soundFontChange.subscribe((value) => {
       this.mdiSound = value;
+    });
+
+    this.showStanzaSubscribe = global.showStanzaChange.subscribe(value => {
+      this.showStanza = value;
     })
   }
 
   presentPopover(myEvent) {
     let popover = this.inputPopCtrl.create(SettingsPopoverPage,{
       ctrl: this,
-    }); 
+    });
+    popover.onDidDismiss(() => {
+      window.localStorage.removeItem('data');
+    })
     popover.present({
       ev: myEvent
     });
   }
 
-  presentTunePopover(myEvent){    
+  presentTunePopover(myEvent){
     let popover = this.inputPopCtrl.create(TunePopoverPage,{
       ctrl: this,
       tunes: this.tunes,
@@ -240,7 +254,6 @@ export class ReaderPage implements OnDestroy{
   ionViewDidLoad() {
     this.canBack = this.readerCtrl.parent._selectHistory.length > 0;
     this.lyricsContainer = this.lyricsContainerRef._elementRef.nativeElement;
-    this.scrollContent = this.lyricsContainerRef._elementRef.nativeElement.querySelector('.scroll-content');
     this.divTab = this.readerCtrl.parent._tabbar.nativeElement;
     
     this.activeHymnal = this.myGlobal.getActiveHymnal();
@@ -254,6 +267,10 @@ export class ReaderPage implements OnDestroy{
     this.currentHymn = _.filter(hymnList, function(item){
       return item.id == activeHymn;
     })[0];
+    
+    this.scrollContent = this.lyricsContainerRef.getNativeElement().querySelector('.scroll-content');
+    this.scrollContent.scrollTop = 0;
+      
     this.initializePlayer();
     this.isBookmarked = this.myGlobal.isInBookmark(this.activeHymnal, this.currentHymn);
     this.fontSize = this.myGlobal.getFontSize();
@@ -270,6 +287,7 @@ export class ReaderPage implements OnDestroy{
       return val['id'] == activeHymnal;
     })[0]['image'];
     this.mdiControl['track'] = "Hymn #" + this.currentHymn['title'];
+    this.walkFlow1.start();
   }
 
   ngOnDestroy(){
@@ -312,17 +330,17 @@ export class ReaderPage implements OnDestroy{
       
 
       if(this.platform.is('android') || this.platform.is('core')){
-        margUp = '63px 0 100px';
-        translateUpTab = 'translate(0, 63px)';
+        margUp = '43px 0 100px';
+        translateUpTab = 'translate(0, 56px)';
         translateUpFooter = 'translate(0, 123px)';
       }
       else if(this.platform.is('ios')){
-        margUp = '44px 0 80px';
-        translateUpTab = 'translate(0, 51px)';
+        margUp = '38px 0 80px';
+        translateUpTab = 'translate(0, 56px)';
         translateUpFooter = 'translate(0, 115px)';
       }
       else{ //windows
-        margUp = '115px 0 60px';
+        margUp = '35px 0 60px';
         translateUpTab = 'translate(0, -115px)';
         translateUpFooter = 'translate(0, 115px)';
       }
@@ -512,8 +530,44 @@ export class ReaderPage implements OnDestroy{
       return s;
   }
 
+  playScroll(){
+    let read = this;
+    this.scrollInterval = setInterval(() => {
+      read.scrollContent.scrollTop += read.scrollCur;
+      if(read.scrollContent.scrollTop + read.scrollContent.offsetHeight >= read.scrollContent.scrollHeight - 5){
+        clearInterval(read.scrollInterval)
+        read.scrollInterval = 0;
+        return;
+      }
+    }, read.scrollTime);
+  }
+
+  pauseScroll(){
+    clearInterval(this.scrollInterval);
+    this.scrollInterval = 0;
+  }
+
+  scrollChange(event){
+    let read = this;
+    if(this.scrollInterval){
+      clearInterval(read.scrollInterval);
+      this.scrollInterval = setInterval(() => {
+        read.scrollContent.scrollTop += (read.scrollCur);
+        if(read.scrollContent.scrollTop + read.scrollContent.offsetHeight >= read.scrollContent.scrollHeight - 5){
+          clearInterval(read.scrollInterval)
+          read.scrollInterval = 0;
+          return;
+        }
+      }, read.scrollTime);
+    }
+  }
+
   goBack(){
     let prevTab = this.readerCtrl.parent.previousTab(true);
     this.readerCtrl.parent.select(prevTab);
+  }
+
+  catchHighlightedText(){
+    console.log(window.getSelection().toString());
   }
 }

@@ -1,14 +1,30 @@
 @mixin verse-without-refrain {
     @for $i from 2 through 10 {
-        .hymn-stanza+.hymn-stanza:nth-child(#{$i}):before {
+        .show-stanza .hymn-stanza+.hymn-stanza:nth-child(#{$i}):before {
             content: quote("Stanza #{$i}:");
+        }
+    }
+}
+
+@mixin verse {
+    @for $i from 1 through 1 {
+        .show-stanza .hymn-stanza:before {
+            content: quote("Stanza #{$i}:");
+        }
+    }
+}
+
+@mixin refrain {
+    @for $i from 1 through 1 {
+        .show-stanza .hymn-refrain:before {
+            content: quote("Refrain:");
         }
     }
 }
 
 @mixin verse-with-refrain {
     @for $i from 2 through 10 {
-        .hymn-refrain+.hymn-stanza:nth-child(#{$i * 2 - 1}):before {
+        .show-stanza .hymn-refrain+.hymn-stanza:nth-child(#{$i * 2 - 1}):before {
             content: quote("Stanza #{$i}:");
         }
     }
@@ -21,6 +37,26 @@ page-reader {
     ion-header {
         .bar-button-ios {
             color: #000000;
+        }
+        .toolbar{
+            min-height:46px;
+
+            .toolbar-title-container{
+            }
+            .tune-switcher{
+                color: map-get($colors, 'dark');
+            }
+        }
+        .caret{
+            width: 21px;
+            height: 14px;
+            padding: 0;
+            margin-top: -7px;
+        }
+        ion-title{
+            span{
+                text-decoration: underline;
+            }
         }
     }
     ion-content {
@@ -46,7 +82,7 @@ page-reader {
             }
         }
         &.theme-tan {
-            background: map-get($colors, 'semi');
+            background: map-get($colors, 'primary');
             color: map-get($colors, 'dark');
             .hymn-line::selection,
             .first-letter::selection {
@@ -76,13 +112,6 @@ page-reader {
             margin-bottom: 20px;
             user-select: inherit !important;
             touch-action: pan-y !important;
-            .hymn-title {
-                margin-bottom: 20px;
-                font-size: inherit;
-                h2 {
-                    display: inline;
-                }
-            }
             .lyrics {
                 touch-action: pan-y !important;
                 .hymn-stanza {
@@ -104,16 +133,6 @@ page-reader {
                         line-height: 125%;
                         user-select: text !important;
                     }
-                }
-                .hymn-stanza:before {
-                    display: block;
-                }
-                .hymn-refrain:before {
-                    display: block;
-                    content: "Refrain:";
-                }
-                .hymn-stanza:nth-child(1):before {
-                    content: "Stanza 1:";
                 }
             }
         }
@@ -139,6 +158,14 @@ page-reader {
             display: flex;
             align-items: center;
 
+            > ion-buttons{
+                width: 100%;
+                display: flex;
+                button{
+                    flex-grow: 1;
+                }
+            }
+
             ion-range{
                 flex-grow: 2;
 
@@ -159,3 +186,5 @@ ion-list-header ion-label ion-badge {
 
 @include verse-without-refrain;
 @include verse-with-refrain;
+@include verse;
+@include refrain;

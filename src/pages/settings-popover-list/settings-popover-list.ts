@@ -18,6 +18,7 @@ import { GlobalService } from '../../services/global-service';
 export class SettingsPopoverListPage {
   global: GlobalService;
   settingsList = ["Alignment", "Theme", "Font Size", "Font Name", "Extra Spacing"];
+  setting: any;
   
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
@@ -29,8 +30,11 @@ export class SettingsPopoverListPage {
       'alignment': this.global.getActiveAlignment(),
       'fontSize' : this.global.getFontSize(),
       'fontName' : this.global.getFontName(),
-      'theme': this.global.getTheme()
+      'theme': this.global.getTheme(),
+      'showStanza': this.global.getShowStanza()
     }
+    this.setting = JSON.parse(JSON.stringify(data));
+    console.log(this.setting);
     window.localStorage.setItem('data', JSON.stringify(data));
   }
 
@@ -40,6 +44,10 @@ export class SettingsPopoverListPage {
       'dest': setting,
       'global': global
     });
+  }
+
+  showStanzaChange(ev){
+    this.global.setShowStanza(this.setting.showStanza);
   }
 
 }

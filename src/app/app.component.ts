@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Platform, App } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -29,7 +29,7 @@ export class MyApp{
   HISTORY_JSON_NAME: string = "history.json";
   SETTINGS_JSON_NAME: string = "settings.json";
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private global : GlobalService,
+  constructor(private platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private global : GlobalService,
               private file: File, private insomnia: Insomnia, private app: App) {
     if(platform.is('cordova')){
       platform.ready().then(() => {
@@ -80,6 +80,16 @@ export class MyApp{
           activeNav.parent.select(prevTab);
         }
       })
+    }
+    else{
+      this.checkSettings("read");
+    }
+  }
+
+  @HostListener('window:beforeunload')
+  onBeforeUnload(){
+    if(!this.platform.is('cordova')){
+      this.writeSettings(null);
     }
   }
 
@@ -151,12 +161,12 @@ export class MyApp{
     var data = this.global.getRecentList();
     if(!exists)
       this.file.writeFile(this.storage + '/' + this.MAIN_FOLDER_NAME, this.HISTORY_JSON_NAME,
-                          JSON.stringify(data), {
-                            append: false, replace: true
-                          });
+        JSON.stringify(data), {
+          append: false, replace: true
+      });
     else
       this.file.writeExistingFile(this.storage + '/' + this.MAIN_FOLDER_NAME, this.HISTORY_JSON_NAME,
-                          JSON.stringify(data));
+        JSON.stringify(data));
   }
 
   readHistory(){
@@ -167,27 +177,37 @@ export class MyApp{
   }
 
   checkSettings(mode: string){
-    let path = this.storage + '/' + this.MAIN_FOLDER_NAME;
-    let filename = this.SETTINGS_JSON_NAME
-    this.file.checkFile(path, filename).then(() => {
-      if(mode == "write")
-        this.writeSettings(true);
-      else
-        this.readSettings();
-    }).catch(err => {
-      if(err.message = "PATH_EXISTS_ERR"){
-        if(mode == "read")
-          this.readSettings();
-        else
+    if(this.platform.is('cordova')){
+      let path = this.storage + '/' + this.MAIN_FOLDER_NAME;
+      let filename = this.SETTINGS_JSON_NAME
+      this.file.checkFile(path, filename).then(() => {
+        if(mode == "write")
           this.writeSettings(true);
+        else
+          this.readSettings();
+      }).catch(err => {
+        if(err.message = "PATH_EXISTS_ERR"){
+          if(mode == "read")
+            this.readSettings();
+          else
+            this.writeSettings(true);
+        }
+        else{
+          this.file.createFile(path, filename, false).then(() => {
+            if(mode = "write")
+              this.writeSettings(false);
+          })
+        }
+      })
+    }
+    else{
+      if(mode == "read"){
+        this.readSettings();
       }
-      else{
-        this.file.createFile(path, filename, false).then(() => {
-          if(mode = "write")
-            this.writeSettings(false);
-        })
+      else if(mode == "write"){
+        this.writeSettings(null);
       }
-    })
+    }
   }
 
   writeSettings(exists: boolean){
@@ -200,37 +220,58 @@ export class MyApp{
       'fontSize' : this.global.getFontSize(),
       'fontName' : this.global.getFontName(),
       'theme': this.global.getTheme(),
-      'hymnSettings': this.global.hymnSettings
+      'hymnSettings': this.global.hymnSettings,
+      'showStanza': this.global.getShowStanza()
     }
-    if(!exists)
-      this.file.writeFile(this.storage + '/' + this.MAIN_FOLDER_NAME, this.SETTINGS_JSON_NAME,
-                          JSON.stringify(data), {
-                            append: false, replace: true
-                          })
-    else
-      this.file.writeExistingFile(this.storage + '/' + this.MAIN_FOLDER_NAME, this.SETTINGS_JSON_NAME,
-                          JSON.stringify(data))
+    if(this.platform.is('cordova')){
+      if(!exists)
+        this.file.writeFile(this.storage + '/' + this.MAIN_FOLDER_NAME, this.SETTINGS_JSON_NAME,
+                            JSON.stringify(data), {
+                              append: false, replace: true
+                            })
+      else
+        this.file.writeExistingFile(this.storage + '/' + this.MAIN_FOLDER_NAME, this.SETTINGS_JSON_NAME,
+                            JSON.stringify(data))                          
+    }
+    else{
+      window.localStorage.setItem('settings', JSON.stringify(data));
+    }
   }
 
   readSettings(){
-    this.file.readAsText(this.storage + '/' + this.MAIN_FOLDER_NAME, this.SETTINGS_JSON_NAME).then((data) => {
-      let jsonData  = JSON.parse(data);
-      this.global.setActiveHymnal(jsonData["activeHymnal"]);
-      this.global.activeHymn = jsonData["activeHymn"];
-      if(jsonData["fontSize"])
-        this.global.setFontSize(jsonData["fontSize"]);
-      if(jsonData["fontName"])
-        this.global.setFontName(jsonData["fontName"]);
-      if(jsonData["recentCount"])
-        this.global.setRecentCount(jsonData["recentCount"]);
-      if(jsonData["extraSpace"])
-        this.global.setPadding(jsonData["extraSpace"]);
-      if(jsonData["alignment"])
-        this.global.setActiveAlignment(jsonData["alignment"]);
-      if(jsonData["theme"])
-        this.global.setTheme(jsonData['theme']);
-      if(jsonData["hymnSettings"])
-        this.global.hymnSettings = jsonData["hymnSettings"];
-    });
+    if(this.platform.is('cordova')){
+      this.file.readAsText(this.storage + '/' + this.MAIN_FOLDER_NAME, this.SETTINGS_JSON_NAME).then((data) => {
+        this.mapSettings(data);
+      });
+    }
+    else{
+      let data = window.localStorage.getItem('settings')
+      if(data)
+        this.mapSettings(data);
+    }
+    
+  }
+
+  mapSettings(data){
+    let jsonData  = JSON.parse(data);
+    this.global.setActiveHymnal(jsonData["activeHymnal"]);
+    this.global.activeHymn = jsonData["activeHymn"];
+    if(jsonData["fontSize"])
+      this.global.setFontSize(jsonData["fontSize"]);
+    if(jsonData["fontName"])
+      this.global.setFontName(jsonData["fontName"]);
+    if(jsonData["recentCount"])
+      this.global.setRecentCount(jsonData["recentCount"]);
+    if(jsonData["extraSpace"])
+      this.global.setPadding(jsonData["extraSpace"]);
+    if(jsonData["alignment"])
+      this.global.setActiveAlignment(jsonData["alignment"]);
+    if(jsonData["theme"])
+      this.global.setTheme(jsonData['theme']);
+    if(jsonData["hymnSettings"])
+      this.global.hymnSettings = jsonData["hymnSettings"];
+    if(jsonData["showStanza"])
+      this.global.setShowStanza(jsonData["showStanza"]);
+  
   }
 }

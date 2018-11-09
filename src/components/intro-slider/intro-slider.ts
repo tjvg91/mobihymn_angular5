@@ -2,12 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { Slides, Platform } from 'ionic-angular';
 import { File } from '@ionic-native/file';
 
-/**
- * Generated class for the IntroSliderComponent component.
- *
- * See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
- * for more info on Angular Components.
- */
 @Component({
   selector: 'intro-slider',
   templateUrl: 'intro-slider.html'

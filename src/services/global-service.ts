@@ -26,7 +26,8 @@ export class GlobalService {
     padding: Number=0;
     fontSize: number = 1.4;
     fontName: string = "Roboto"
-    theme: string = "pic";
+    theme: string = "light";
+    showStanza: boolean = true;
     public instrument: Object = {
         "name" : "piano",
         "value": "acoustic_grand_piano-mp3"
@@ -56,6 +57,7 @@ export class GlobalService {
     public fontNameChange : Subject<string> = new Subject<string>();
     public themeChange : Subject<string> = new Subject<string>();
     public soundFontChange: Subject<object> = new Subject<object>();
+    public showStanzaChange: Subject<boolean> = new Subject<boolean>();
 
     constructor(private file: File, private platform: Platform) {
         this.fireConfig = {
@@ -84,6 +86,11 @@ export class GlobalService {
 
     setHymnals(newValue:Array<object>) {        
         this.hymnals = newValue;        
+        this.hymnalChange.next(this.hymnals);
+    }
+
+    addToHymnals(newValue: Array<object>){
+        this.hymnals = this.hymnals.concat(newValue);
         this.hymnalChange.next(this.hymnals);
     }
 
@@ -186,6 +193,11 @@ export class GlobalService {
         this.soundFontChange.next(newValue);
     }
 
+    setShowStanza(newValue: boolean){
+        this.showStanza = newValue;
+        this.showStanzaChange.next(newValue);
+    }
+
     getHymnalList() : Array<object>{
         return this.hymnals;
     }
@@ -240,12 +252,13 @@ export class GlobalService {
 
     getHymnals(http: Http){
         let url = "";
-        if(this.platform.is('android'))
-            url = this.file.externalRootDirectory + 'MobiHymn/hymnals.json';
+        console.log(this.file)
+        if(!this.platform.is('cordova'))
+            url = '../assets/hymnals/hymnals.json';
+        else if(this.platform.is('android'))
+            url = this.file.externalRootDirectory + '/MobiHymn/hymnals.json';
         else if(this.platform.is('ios'))
-            url = this.file.documentsDirectory + 'MobiHymn/hymnals.json';
-        else
-            url = '../assets/hymnals.json';
+            url = this.file.documentsDirectory + '/MobiHymn/hymnals.json';
         return http.get(url).map(res => res.json());
     }
 
@@ -269,6 +282,10 @@ export class GlobalService {
         url += 'assets/js/soundfonts/acoustic_grand_piano-mp3.js';
         this.ac = new AudioContext();
         return SoundFont.instrument(this.ac, url);
+    }
+
+    getShowStanza(){
+        return this.showStanza;
     }
 
     isInBookmark(hymnalId, hymnId){

@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, HostListener } from '@angular/core';
 import { Http } from '@angular/http';
 import { NavController, Platform, LoadingController, AlertController, ModalController } from 'ionic-angular';
 import { GlobalService } from '../../services/global-service';
@@ -39,10 +39,12 @@ export class HomePage implements OnDestroy{
   android: boolean;
   ios: boolean;  
   wp: boolean;
+  desktop: boolean;
+  tab: boolean;
 
   canBack: boolean;
-  
   storage: string;
+  index: any;
 
   fbHymnalsDateModified: Number;
   userHymnalsDateModified: Number;
@@ -66,6 +68,14 @@ export class HomePage implements OnDestroy{
               return obj1['id'] == obj2['id'];
           });
         });
+      
+      if(this.activeHymnal){
+        var tempAct = this.hymnalList.filter(x => {
+          return x['id'] == hom.activeHymnal;
+        })
+        if(tempAct.length > 0)
+          this.setActiveHymnal(this.activeHymnal);
+      }
     });
 
     this.activeHymnalSubscribe = global.activeHymnalChange.subscribe(val => {
@@ -109,10 +119,19 @@ export class HomePage implements OnDestroy{
     this.android = platform.is('android');
     this.ios = platform.is('ios');
     this.wp = platform.is('wp');
+    this.desktop = window.innerWidth >= 1024 && !this.platform.is('cordova');
+    this.tab = window.innerWidth < 1024 && window.innerWidth >= 768;
 
     this.storage = this.android ? file.externalRootDirectory : file.documentsDirectory;
 
     this.showLogin();
+  }
+
+  
+  @HostListener('window:resize')
+  onResize(){
+    this.desktop = window.innerWidth >= 1024 && !this.platform.is('cordova');
+    this.tab = window.innerWidth < 1024 && window.innerWidth >= 768;
   }
   
   setActiveHymnal(hymnalId : string){
@@ -130,9 +149,10 @@ export class HomePage implements OnDestroy{
 
   ionViewDidLoad(){
     this.canBack = this.homeCtrl.parent._selectHistory.length > 0;
-    this.getFBHymnalsDateModified(); 
+    this.getFBHymnalsDateModified();
+    this.activeHymnal = this.myGlobal.getActiveHymnal();
     if(this.platform.is('cordova')){
-      this.activeHymnal = this.myGlobal.getActiveHymnal();
+      
       this.isCordova = true;
       this.network.onConnect().subscribe(data => {
         this.isOnline = true;
@@ -211,11 +231,12 @@ export class HomePage implements OnDestroy{
     });
     this.myGlobal.firebaseAuth.onAuthStateChanged(function(user){
       if(user){
+        hom.fetching = true;
         hom.getHymnalsFirebase().then(function(url){
           var newUrl = hom.platform.is('cordova') ? url :
                       url.replace(hom.firebaseRegEx, hom.firebaseStorage);
           hom.myHttp.get(newUrl).map(x => x.json()).subscribe(x => {
-            hom.myGlobal.setHymnals(x.output);
+            hom.myGlobal.addToHymnals(x.output);
             hom.fetching = false;
           });
         }).catch(function(err){

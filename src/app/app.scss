@@ -60,6 +60,14 @@
   font-style: normal;
 }
 
+@font-face{
+    font-family: "Nuecha";
+    src: url("../assets/fonts/nuecha/Neucha.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    letter-spacing: 2px;
+}
+
 .content .scroll-content {
     overflow: auto;
     user-select: auto !important;
@@ -115,9 +123,62 @@
     margin: 14px 8px 14px 0;
 }
 
-.popover-content{
-    max-height: 17em !important;
+.popover-ios{
+    .popover-content{
+        max-height: 315px !important;
+        width: 220px;
+    }
 }
+.popover-md{
+    .popover-content{
+        max-height: 290px !important;
+    }
+}
+
+.card-background-page {
+    ion-card {
+      position: relative;
+      text-align: center;
+
+      .overlay{
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.4);
+          display: block;
+          position: absolute;
+          top: 0;
+      }
+
+      .card-title {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-80%);
+        @media screen and (min-width: 1440px) {
+            font-size: 1.5em;
+        }
+        @media screen and (max-width: 1039px) {
+            font-size: 1em;
+        }
+        width: 100%;
+        font-weight: bold;
+        color: #fff;
+      }
+    
+      .card-subtitle {
+        @media screen and (min-width: 1440px) {
+            font-size: 0.8em;
+        }
+        @media screen and (max-width: 1039px) {
+            font-size: 0.6em;
+        }
+        position: absolute;
+        top: 50%;
+        transform: translateY(80%);
+        width: 100%;
+        color: #fff;
+      }
+    }
+  }
 
 ion-header ion-navbar[color="dark"]{
     ion-title .toolbar-title{

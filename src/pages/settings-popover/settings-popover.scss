@@ -1,13 +1,33 @@
 page-settings-popover {
-    max-height: 29em;
     display: block;
-    min-height: 23em;
     ion-content{
         height: inherit;
         min-height: inherit;
         .scroll-content{
             height: inherit;
             min-height: inherit;
+        }
+    }
+}
+
+.popover-ios{
+    page-settings-popover{
+        max-height: 315px;
+        min-height: 315px;
+
+        .list-ios{
+            margin-bottom: 10px;
+        }
+    }
+}
+
+.popover-md{
+    page-settings-popover{
+        max-height: 290px;
+        min-height: 290px;
+
+        .list-md{
+            margin-bottom: 0;
         }
     }
 }

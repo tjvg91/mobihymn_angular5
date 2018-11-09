@@ -25,7 +25,6 @@ export class InputModalPage{
   activeHymnal: string;
   activeHymn: string;
   navParams: NavParams
-  hymnLimit : Number;
   hymnSubscribe: any;
   hymnFilter: object;
   hymnFilterString: string
@@ -53,7 +52,6 @@ export class InputModalPage{
             private alertCtrl: AlertController, private toastCtrl: ToastController,
             private file: File, private platform: Platform, private global: GlobalService) {
     this.inputType = "all_hymns";
-    this.hymnLimit = 5;
     this.navParams = inputParams;
 
     this.fileRoot = platform.is('android') ? file.externalRootDirectory : file.documentsDirectory;
@@ -74,9 +72,6 @@ export class InputModalPage{
     
     this.activeHymn = this.myGlobal.getActiveHymn();
     let activeHymn = this.activeHymn
-    /*this.hymnFilter = _.filter(this.hymnList, item => {
-      return item.id == activeHymn;
-    })[0].number;*/
     this.hymnFilter = {
       'number': '',
       'tune': ''
@@ -90,7 +85,6 @@ export class InputModalPage{
     this.origBkmkList = this.bookmarkList.map(x => Object.assign({}, x));
     this.hymnList = this.origHymnList.map(x => Object.assign({}, x))
 
-    this.keyboardShow = "shown";
     this.hymnFilterString = _.filter(this.hymnList, item => {
       return item.id == activeHymn;
     })[0].number.replace(/f|s|t/, '');
@@ -143,12 +137,6 @@ export class InputModalPage{
   setActiveHymn(hymnId){
     this.myGlobal.setActiveHymn(hymnId);
     this.viewCtrl.dismiss();
-  }
-
-  getIndicator() : string{
-    let limit = this.hymnLimit;
-    let length = this.hymnList.length;
-    return 'Displaying ' + Math.min(+limit, length) + ' of ' + this.hymnList.length + ' hymns';
   }
 
   bkmkSelect(){

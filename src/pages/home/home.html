@@ -9,50 +9,61 @@
     </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="card-background-page">
     <div class="banner" type="progress" *ngIf="fetching">
         Loading hymnals...
     </div>
-    <ion-item-group *ngIf="offlineHymnalList.length == 0 && isCordova" class="empty">
-        <ion-item-divider>DOWNLOADED HYMNALS</ion-item-divider>
-        <ion-item>
-            <p>No downloaded hymns to display</p>
-        </ion-item>
-    </ion-item-group>
-    <ion-item-group *ngIf="offlineHymnalList.length > 0">
-        <ion-item-divider>DOWNLOADED HYMNALS</ion-item-divider>
-        <ion-item *ngFor="let hymnal of offlineHymnalList" (tap)="setActiveHymnal(hymnal.id)" [ngClass]="{ 'active': (activeHymnal == hymnal.id) }">
-            <ion-thumbnail item-start>
-                <img [src]="hymnal.image" [alt]="hymnal.name" />
-            </ion-thumbnail>
-            <h2>{{ hymnal.name }}</h2>
-            <h3 *ngIf="hymnal.url">
-                <a [href]="hymnal.url" target="_blank">{{ hymnal.url }}</a>
-            </h3>
-            <p>{{hymnal.count}} hymns</p>
-        </ion-item>
-    </ion-item-group>
-    <ion-item-group *ngIf="!onlineHymnalList" class="empty">
-        <ion-item-divider>ONLINE HYMNALS</ion-item-divider>
-        <ion-item>
-            <p>No online hymns to display</p>
-        </ion-item>
-    </ion-item-group>
-    <ion-item-group *ngIf="onlineHymnalList">
-        <ion-item-divider>ONLINE HYMNALS</ion-item-divider>
-        <ion-item *ngFor="let hymnal of onlineHymnalList" [ngClass]="{ 'active': (activeHymnal == hymnal.id) }">
-            <ion-thumbnail item-start>
-                <img [src]="hymnal.image" [alt]="hymnal.name" />
-            </ion-thumbnail>
-            <h2>{{ hymnal.name }}</h2>
-            <h3 *ngIf="hymnal.url">
-                <a [href]="hymnal.url" target="_blank">{{ hymnal.url }}</a>
-            </h3>
-            <p>{{hymnal.count}} hymns</p>
-            <button ion-button item-end clear (tap)="setActiveHymnal(hymnal.id)" *ngIf="!isCordova">View</button>
-            <button ion-button item-end clear (tap)="setActiveHymnal(hymnal.id)" *ngIf="isCordova">
-                <ion-icon name="download"></ion-icon>
-            </button>
-        </ion-item>
-    </ion-item-group>
+    <ion-list>
+        <ion-item-group *ngIf="offlineHymnalList.length > 0 && !desktop && !tab">
+            <ion-item *ngFor="let hymnal of offlineHymnalList" (tap)="setActiveHymnal(hymnal.id)" [ngClass]="{ 'active': (activeHymnal == hymnal.id) }" text-wrap>
+                <ion-thumbnail item-start>
+                    <img [src]="hymnal.image" [alt]="hymnal.name" />
+                </ion-thumbnail>
+                <h2>{{ hymnal.name }}</h2>
+                <h3 *ngIf="hymnal.url">
+                    <a [href]="hymnal.url" target="_blank">{{ hymnal.url }}</a>
+                </h3>
+                <p>{{hymnal.count}} hymns</p>
+            </ion-item>
+        </ion-item-group>
+        <ion-item-group *ngIf="onlineHymnalList && onlineHymnalList.length > 0 && !desktop && !tab">
+            <ion-item *ngFor="let hymnal of onlineHymnalList" [ngClass]="{ 'active': (activeHymnal == hymnal.id) }" text-wrap>
+                <ion-thumbnail item-start>
+                    <img [src]="hymnal.image" [alt]="hymnal.name" />
+                </ion-thumbnail>
+                <h2>{{ hymnal.name }}</h2>
+                <h3 *ngIf="hymnal.url">
+                    <a [href]="hymnal.url" target="_blank">{{ hymnal.url }}</a>
+                </h3>
+                <p>{{hymnal.count}} hymns</p>
+                <button ion-button item-end clear (tap)="setActiveHymnal(hymnal.id)" *ngIf="isCordova">
+                    <ion-icon name="download"></ion-icon>
+                </button>
+            </ion-item>
+        </ion-item-group>
+    </ion-list>
+
+    <ng-container *ngIf="desktop || tab">
+        <ion-grid>
+            <ion-row>
+                <ion-col [attr.col-lg-3]="desktop ? true : null" [attr.col-md-3]="tab ? true : null" col-sm-12 *ngFor="let hymnal of offlineHymnalList" (tap)="setActiveHymnal(hymnal.id)">
+                    <ion-card>
+                        <img [src]="hymnal.image" [alt]="hymnal.name" />
+                        <div class="overlay"></div>
+                        <p class="card-title">{{hymnal.name}}</p>
+                        <p class="card-subtitle">{{hymnal.count}} hymns</p>
+                    </ion-card>
+                </ion-col>
+                <ion-col [attr.col-lg-3]="desktop ? true : null" [attr.col-md-3]="tab ? true : null" *ngFor="let hymnal of onlineHymnalList" (tap)="setActiveHymnal(hymnal.id)">
+                    <ion-card>
+                        <img [src]="hymnal.image" [alt]="hymnal.name" />
+                        <div class="overlay"></div>
+                        <p class="card-title">{{hymnal.name}}</p>
+                        <p class="card-subtitle">{{hymnal.count}} hymns</p>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        
+    </ng-container>
 </ion-content>
