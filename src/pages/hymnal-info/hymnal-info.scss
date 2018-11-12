@@ -1,0 +1,26 @@
+page-hymnal-info {
+    .container{
+        height: 100%;
+        .image-container{
+            position: relative;
+            height: 200px;
+            img{
+                clip: rect(0 300px 195px 0);
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+        ul{
+            padding: 0 10px;
+            list-style: none;
+            max-height: calc(100% - 150px);
+            overflow: auto;
+
+            li{
+                font-style: italic;
+            }
+        }
+    }
+}

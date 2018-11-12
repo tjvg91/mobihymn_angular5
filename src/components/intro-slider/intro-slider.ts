@@ -14,18 +14,18 @@ export class IntroSliderComponent {
   constructor(private platform: Platform, private file: File) {
     //if(window.localStorage.getItem('introSlider')){}
     platform.ready().then(() => {
-      let intro = window.localStorage.getItem('intro');
+      let intro = window.localStorage.getItem('intro2');
+      window.localStorage.removeItem('intro');
       if(intro)
         this.exitSlides();
       else
-        window.localStorage.setItem('intro', 'true');
-
+        window.localStorage.setItem('intro2', 'true');
       let url = platform.is('cordova') ? (file.applicationDirectory + 'www/') : '../';
       let ios = platform.is('ios');
   
       if(ios){
         this.slideList = [{
-          icon: [url + "assets/images/logo/Icon-72@2x.png"],
+          icon: [url + "assets/images/logo/logo.png"],
           iconType: "img",
           title: "Welcome to MobiHymn"
         },{
@@ -35,13 +35,19 @@ export class IntroSliderComponent {
           title: "Browse",
           description: "Browse through all the hymnals you desire to read"
         },{
+          icon: [url + "assets/images/intro/mobihymn-hymns-ios.png"],
+          iconType: "img",
+          class: "cropped",
+          title: "Browse",
+          description: "Browse through all the hymns in your desired hymnal"
+        },{
           icon: [url + "assets/images/intro/mobihymn-reader-ios.png"],
           iconType: "img",
           class: "cropped",
           title: "Read and Play",
           description: "MobiHymn lets you read a hymn's lyrics and play it in a chosen hymnal"
         },{
-          icon: [url + "assets/images/intro/mobihymn-reader-edit-ios.png"],
+          icon: [url + "assets/images/intro/mobihymn-edit-ios.png"],
           iconType: "img",
           class: "cropped",
           title: "Customize",
@@ -54,7 +60,7 @@ export class IntroSliderComponent {
       }
       else{
         this.slideList = [{
-          icon: [url + "assets/images/logo/Icon-72@2x.png"],
+          icon: [url + "assets/images/logo/logo.png"],
           iconType: "img",
           title: "Welcome to MobiHymn"
         },{
@@ -64,13 +70,19 @@ export class IntroSliderComponent {
           title: "Browse",
           description: "Browse through all the hymnals you desire to read"
         },{
+          icon: [url + "assets/images/intro/mobihymn-hymns-android.png"],
+          iconType: "img",
+          class: "cropped",
+          title: "Browse",
+          description: "Browse through all the hymns in your desired hymnal"
+        },{
           icon: [url + "assets/images/intro/mobihymn-reader-android.png"],
           iconType: "img",
           class: "cropped",
           title: "Read and Play",
           description: "MobiHymn lets you read a hymn's lyrics and play it in a chosen hymnal"
         },{
-          icon: [url + "assets/images/intro/mobihymn-reader-edit-android.png"],
+          icon: [url + "assets/images/intro/mobihymn-edit-android.png"],
           iconType: "img",
           class: "cropped",
           title: "Customize",

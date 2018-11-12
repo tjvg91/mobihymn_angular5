@@ -6,6 +6,7 @@ import { UserService } from '../../services/user-service';
 import { Network } from '@ionic-native/network';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { HymnalInfoPage } from '../hymnal-info/hymnal-info';
 import * as _ from 'lodash';
 
 @Component({
@@ -91,8 +92,9 @@ export class HomePage implements OnDestroy{
                 var newUrl = hom.platform.is('cordova') ? url :
                         url.replace(hom.firebaseRegEx, hom.firebaseStorage);
                 hom.myHttp.get(newUrl).map(x => x.json()).subscribe(x => {
-                  hom.myGlobal.addToHymns('hymnal' + hom.activeHymnal, x)
-                  hom.myGlobal.setActiveHymn('1');
+                  hom.myGlobal.addToHymns('hymnal' + hom.activeHymnal, x);
+                  if(!hom.myGlobal.getActiveHymn())
+                    hom.myGlobal.setActiveHymn('1');
                   hom.dismissLoader();
                   hom.goToReader(true);
                 })
@@ -379,12 +381,14 @@ export class HomePage implements OnDestroy{
   }
 
   showLoader() {
-    this.readerLoader = this.loadingCtrl.create({
-      content: 'Getting settings...',
-      spinner: 'circles'
-    });
+    if(!this.readerLoader){
+      this.readerLoader = this.loadingCtrl.create({
+        content: 'Getting settings...',
+        spinner: 'circles'
+      });
 
-    this.readerLoader.present();
+      this.readerLoader.present();
+    }
   }
 
   showLogin(){
@@ -404,6 +408,13 @@ export class HomePage implements OnDestroy{
   }
 
   goBack(){
-    
+    let prevTab = this.homeCtrl.parent.previousTab(true);
+    this.homeCtrl.parent.select(prevTab);
+  }
+
+  openInfo(hymnalId){
+    this.modalCtrl.create(HymnalInfoPage, {
+      hymnalId: hymnalId
+    }).present();
   }
 }

@@ -51,10 +51,14 @@ export class SearchPage {
         if(lines.length > 0){
           lines.each(function(ind, line){
             if(searchItems.findIndex(i => i['number'] == hymn['number'] && i['line'] == line.textContent) < 0){
+              var posLine = lyrics.find(line).index();
+              var posStanza = lyrics.find(line).parent().index();
               searchItems.push({
                 'id': hymn['id'],
                 'number': hymn['number'],
-                'line': line.textContent
+                'line': line.textContent,
+                'posLine': posLine,
+                'posStanza': posStanza
               });  
             }
           })
@@ -79,7 +83,8 @@ export class SearchPage {
     this.searchLoader.dismiss();
   }
 
-  goToReader(hymnId){
+  goToReader(hymnId, posStanza, posLine){
+    window.localStorage.setItem('scrollTo', JSON.stringify({posStanza: posStanza, posLine: posLine}));
     this.global.setActiveHymn(hymnId);
     this.searchCtrl.parent.select(0);
   }

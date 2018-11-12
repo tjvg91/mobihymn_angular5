@@ -1,6 +1,6 @@
 import { Component, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { WalkthroughFlowComponent } from 'angular-walkthrough'
+//import { WalkthroughFlowComponent } from 'angular-walkthrough'
 
 import { IonicPage, NavController, PopoverController, ModalController, AlertController, ToastController, Gesture, Content, Platform } from 'ionic-angular';
 import { GlobalService } from '../../services/global-service';
@@ -95,7 +95,7 @@ export class ReaderPage implements OnDestroy{
   @ViewChild('readerHeader') divHeader: ElementRef;
   @ViewChild('lyricsContainer') lyricsContainerRef: Content;
   @ViewChild('footerReader') footerReader: ElementRef;
-  @ViewChild('walkFlow1') walkFlow1: WalkthroughFlowComponent;
+  //@ViewChild('walkFlow1') walkFlow1: WalkthroughFlowComponent;
   scrollContent: any;
   divTab: any;
 
@@ -141,6 +141,18 @@ export class ReaderPage implements OnDestroy{
         return val['id'] == activeHymnal;
       })[0]['image'];
       this.mdiControl['track'] = "Hymn #" + this.currentHymn['title'];
+
+      setTimeout(() => {
+        let scrollTo = window.localStorage.getItem('scrollTo');
+        if(scrollTo){
+          let scrollPos = JSON.parse(scrollTo);
+          this.lyricsContainerRef.getElementRef().nativeElement
+            .querySelector('.hymn-stanza:nth-child(' + (scrollPos['posStanza'] + 1) + ')')
+            .querySelector('.hymn-line:nth-child(' + (scrollPos['posLine'] + 1) + ')').scrollIntoView();
+          window.localStorage.removeItem('scrollTo');
+        }
+      }, 200);
+        
     });
 
     this.bookmarksSubscribe = global.bookmarksChange.subscribe((value) => {
@@ -276,8 +288,8 @@ export class ReaderPage implements OnDestroy{
     this.fontSize = this.myGlobal.getFontSize();
     this.extraSpace = this.myGlobal.getPadding();
     this.themeString = this.myGlobal.getTheme();
-    this.alignment = this.myGlobal.getActiveAlignment();
     this.fontName = this.myGlobal.getFontName();
+    this.alignment = this.myGlobal.getActiveAlignment();
     let currentHymn = this.currentHymn;
     this.tunes = _.filter(hymnList, function(item){
       return new RegExp('^' + currentHymn['number'] + "(f|s|t)", "i").test(item['number']);
@@ -287,7 +299,7 @@ export class ReaderPage implements OnDestroy{
       return val['id'] == activeHymnal;
     })[0]['image'];
     this.mdiControl['track'] = "Hymn #" + this.currentHymn['title'];
-    this.walkFlow1.start();
+    //this.walkFlow1.start();
   }
 
   ngOnDestroy(){
