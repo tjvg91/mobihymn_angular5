@@ -35,19 +35,21 @@
             (panend)="catchHighlightedText()" (pressup)="catchHighlightedText()">
       </div>
   </div>
-  <ng-walkthrough-flow
+  <!-- <ng-walkthrough-flow
       focusBackdrop="true"
+      focusGlow="true"
       focusHighlightAnimation="true"
       closeButton="true"
       closeAnywhere="false"
       showArrow="true"
       radius="auto" #walkFlow1>
       <ng-walkthrough id="walk-to-title"
-         focusElementSelector="#hymnTitle"
-         contentText="Tap to browse hymns in the hymnal">
+         focusElementSelector="span#hymnTitle"
+         contentText="Tap to browse hymns in the hymnal"
+         typeSelector="element">
 
       </ng-walkthrough>
-    </ng-walkthrough-flow>
+    </ng-walkthrough-flow> -->
 </ion-content>
 
 <ion-footer #footerReader>

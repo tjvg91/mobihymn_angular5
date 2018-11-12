@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>Hymnal Info</ion-title>
+    
+    <ion-buttons end>
+      <button ion-button icon-only (tap)="dismiss()" clear>
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <div class="container" *ngIf="activeHymnal">
+      <div class="image-container">
+          <img [src]="activeHymnal.image"/>
+      </div>
+      <h1>{{ activeHymnal.name }}</h1>
+      <p>Hymns: ({{ activeHymnal.count }})</p>
+
+      <ul>
+        <li *ngFor="let hymn of curHymns">{{hymn['number'] + '. ' + hymn['firstLine']}}</li>
+      </ul>
+  </div>
+  <ion-fab bottom right>
+    <button ion-fab (tap)="dismiss({download: activeHymnal['id']})">
+      <ion-icon name="download"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { WalkthroughModule } from 'angular-walkthrough';
 import { Pro } from "@ionic/pro";
 // import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 // import { library } from '@fortawesome/fontawesome-svg-core';
@@ -29,6 +28,7 @@ import { RevisionsModalPage } from '../pages/revisions-modal/revisions-modal';
 import { AboutPage } from '../pages/about/about';
 import { ImageMakerPage } from '../pages/image-maker/image-maker';
 import { IntroSliderComponent } from '../components/intro-slider/intro-slider';
+import { HymnalInfoPage } from '../pages/hymnal-info/hymnal-info';
 import { GlobalService } from '../services/global-service';
 import { UserService } from '../services/user-service';
 
@@ -85,6 +85,7 @@ export class MyErrorHandler implements ErrorHandler {
     AboutPage,
     ImageMakerPage,
     IntroSliderComponent,
+    HymnalInfoPage,
     TabsPage
   ],
   imports: [
@@ -92,7 +93,6 @@ export class MyErrorHandler implements ErrorHandler {
     CommonModule,
     HttpModule,
     BrowserAnimationsModule,
-    WalkthroughModule,
     IonicModule.forRoot(MyApp),
     //FontAwesomeModule
   ],
@@ -115,6 +115,7 @@ export class MyErrorHandler implements ErrorHandler {
     ImageMakerPage,
     TunePopoverPage,
     IntroSliderComponent,
+    HymnalInfoPage,
     TabsPage
   ],
   providers: [
