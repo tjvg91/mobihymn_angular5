@@ -16,7 +16,7 @@
     <h4 ion-text>Choose a hymnal to read</h4>
     <ion-list>
         <ion-item-group *ngIf="offlineHymnalList.length > 0 && !desktop && !tab">
-            <ion-item *ngFor="let hymnal of offlineHymnalList" (tap)="setActiveHymnal(hymnal.id)" [ngClass]="{ 'active': (activeHymnal == hymnal.id) }" text-wrap>
+            <ion-item *ngFor="let hymnal of offlineHymnalList" (tap)="setActiveHymnal(hymnal.id, true)" [ngClass]="{ 'active': (activeHymnal == hymnal.id) }" text-wrap>
                 <ion-thumbnail item-start>
                     <img [src]="hymnal.image" [alt]="hymnal.name" />
                 </ion-thumbnail>
@@ -25,6 +25,9 @@
                     <a [href]="hymnal.url" target="_blank">{{ hymnal.url }}</a>
                 </h3>
                 <p>{{hymnal.count}} hymns</p>
+                <button ion-button item-end clear (tap)="openInfo(hymnal.id)">
+                    <ion-icon name="information-circle"></ion-icon>
+                </button>
             </ion-item>
         </ion-item-group>
         <ion-item-group *ngIf="onlineHymnalList && onlineHymnalList.length > 0 && !desktop && !tab">
@@ -37,11 +40,8 @@
                     <a [href]="hymnal.url" target="_blank">{{ hymnal.url }}</a>
                 </h3>
                 <p>{{hymnal.count}} hymns</p>
-                <button ion-button item-end clear (tap)="setActiveHymnal(hymnal.id)" *ngIf="isCordova">
-                    <ion-icon name="download"></ion-icon>
-                </button>
                 <button ion-button item-end clear (tap)="openInfo(hymnal.id)">
-                    <ion-icon name="information"></ion-icon>
+                    <ion-icon name="information-circle"></ion-icon>
                 </button>
             </ion-item>
         </ion-item-group>

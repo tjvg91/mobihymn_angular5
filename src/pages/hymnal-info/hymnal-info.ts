@@ -1,13 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, ViewController, NavParams } from 'ionic-angular';
 import { GlobalService } from '../../services/global-service';
-
-/**
- * Generated class for the HymnalInfoPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Platform } from "ionic-angular";
 
 @IonicPage()
 @Component({
@@ -17,11 +11,18 @@ import { GlobalService } from '../../services/global-service';
 export class HymnalInfoPage {
   activeHymnal: Object;
   curHymns: Array<Object>;
-  constructor(public viewCtrl: ViewController, public navParams: NavParams, private global: GlobalService) {
+  isCordova: boolean;
+  isOffline: boolean;
+  constructor(public viewCtrl: ViewController, public navParams: NavParams, private global: GlobalService,
+            private platform: Platform) {
+    platform.ready().then(() => {
+      this.isCordova = platform.is('cordova');
+    });
   }
 
   ionViewDidLoad() {
     let hymnalId = this.navParams.get('hymnalId');
+    this.isOffline = this.navParams.get('isOffline');
     this.activeHymnal = this.global.getHymnalList().filter(x => {
       return x['id'] == hymnalId;
     })[0];
