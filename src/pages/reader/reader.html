@@ -14,7 +14,7 @@
       <ion-title *ngIf="currentHymn && currentHymn.title">
          <span (tap)="presentInputModal()" id="hymnTitle">Hymn #{{ currentHymn.title }}</span>
          <button ion-button clear (tap)="presentTunePopover($event)" *ngIf="tunes.length > 0" class="caret">
-            <ion-icon name="arrow-dropdown"></ion-icon>
+            <ion-icon ios="ios-arrow-down" md="md-arrow-dropdown"></ion-icon>
          </button>
       </ion-title>
       <ion-buttons end>
@@ -23,7 +23,7 @@
               <ion-icon name="star" *ngIf="isBookmarked"></ion-icon>
           </button>
           <button ion-button icon-only (tap)="presentPopover($event)" id="settings">
-              <span class="fa fa-font"></span>
+              <fa-icon icon="font"></fa-icon>
           </button>
       </ion-buttons>
   </ion-navbar>
@@ -69,7 +69,8 @@
             <ion-icon name="pause"></ion-icon>
          </button>
          <button ion-button clear *ngIf="!mdiSound">
-            <span class="fa fa-spinner fa-pulse fa-2x"></span>
+            <!-- <span class="fa fa-spinner fa-pulse fa-2x"></span> -->
+            <fa-icon name="spinner" [pulse]="true" size="2x"></fa-icon>
          </button>
    
          <button ion-button clear (tap)="stopTrack()" *ngIf="mdiPlayer && mdiSound" [disabled]="!mdiPlayer" [disabled]="currentHymn && !currentHymn['midi']">

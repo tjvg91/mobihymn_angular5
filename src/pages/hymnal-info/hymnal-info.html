@@ -24,7 +24,7 @@
       </ul>
   </div>
   <ion-fab bottom right>
-    <button ion-fab (tap)="dismiss({download: activeHymnal['id']})">
+    <button ion-fab (tap)="dismiss({download: true})" *ngIf="isCordova && !isOffline">
       <ion-icon name="download"></ion-icon>
     </button>
   </ion-fab>

@@ -412,9 +412,17 @@ export class HomePage implements OnDestroy{
     this.homeCtrl.parent.select(prevTab);
   }
 
-  openInfo(hymnalId){
-    this.modalCtrl.create(HymnalInfoPage, {
-      hymnalId: hymnalId
-    }).present();
+  openInfo(hymnalId, offline){
+    let hymnalInfoModal = this.modalCtrl.create(HymnalInfoPage, {
+      hymnalId: hymnalId,
+      isOffline: offline
+    });
+    hymnalInfoModal.onDidDismiss((data) => {
+      if(data && data['download']){
+        this.setActiveHymnal(hymnalId);
+        this.downloadHymns();
+      }
+    })
+    hymnalInfoModal.present();
   }
 }
