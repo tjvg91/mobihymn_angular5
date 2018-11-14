@@ -179,6 +179,10 @@ export class HomePage implements OnDestroy{
     }
   }
 
+  ionViewDidEnter(){
+    this.canBack = this.homeCtrl.parent._selectHistory.length > 0;
+  }
+
   getHymnalsFirebase(){
     return this.myGlobal.firebaseStorage.child('hymnals.json').getDownloadURL();
   }

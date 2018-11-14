@@ -40,6 +40,7 @@ import { File } from '@ionic-native/file';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { Insomnia } from '@ionic-native/insomnia';
 import { Network } from '@ionic-native/network';
+import { SpeechRecognition } from "@ionic-native/speech-recognition";
 
 Pro.init('91b67970', {
   appVersion: '0.8.2'
@@ -131,6 +132,7 @@ library.add(faSpinner, faFont);
     FileTransfer,
     Insomnia,
     Network,
+    SpeechRecognition,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })

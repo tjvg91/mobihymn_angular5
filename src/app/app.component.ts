@@ -75,7 +75,13 @@ export class MyApp{
 
       platform.registerBackButtonAction(() => {
         var activeNav = app.getActiveNav();
-        if(activeNav.parent._selectHistory){
+        var activeModal = app._appRoot._modalPortal.getActive();
+        var popupModal = app._appRoot._overlayPortal.getActive();
+        if(activeModal)
+          activeModal.dismiss();
+        else if(popupModal)
+          popupModal.dismiss();
+        else if(activeNav.parent._selectHistory){
           let prevTab = activeNav.parent.previousTab(true);
           activeNav.parent.select(prevTab);
         }
@@ -84,6 +90,7 @@ export class MyApp{
     else{
       this.checkSettings("read");
     }
+    console.log(this);
   }
 
   @HostListener('window:beforeunload')

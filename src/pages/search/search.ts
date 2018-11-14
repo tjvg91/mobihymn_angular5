@@ -5,12 +5,7 @@ import * as $ from 'jquery';
 
 import { GlobalService } from '../../services/global-service';
 
-/**
- * Generated class for the SearchPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
+import { SpeechRecognition } from "@ionic-native/speech-recognition";
 
 @IonicPage()
 @Component({
@@ -24,32 +19,44 @@ export class SearchPage {
   searchItems: Array<object>;
   searchLoader: Loading;
   canBack: boolean;
+  micAvailable: boolean;
+  micOn: boolean;
 
   constructor(public searchCtrl: NavController, private loadingCtrl: LoadingController, public navParams: NavParams,
-              private global : GlobalService, private modalCtrl: ModalController) {    
+              private global : GlobalService, private modalCtrl: ModalController, private speechRecog: SpeechRecognition) {    
     this.hymnList = global.getHymnList();
     this.activeHymnal = global.getActiveHymnal();
+    this.micOn = false;
+  }
+
+  ionViewDidLoad(){
+    let modalDisplay = window.localStorage.getItem("modalDisplay");
+    if(!modalDisplay){
+      let modal = this.modalCtrl.create(SearchModalPage);
+      modal.onDidDismiss(() => {
+        window.localStorage.setItem("modalDisplay", "true");
+      });
+      modal.present();
+    }
+
+    this.micAvailable = false;
+    this.speechRecog.isRecognitionAvailable().then(val => {
+      this.micAvailable = val;
+    })
   }
 
   ionViewDidEnter(){
     this.canBack = this.searchCtrl.parent._selectHistory.length > 0;
-    
-    //let modalDisplay = window.localStorage.getItem("modalDisplay");
-    let modal = this.modalCtrl.create(SearchModalPage);
-    modal.onDidDismiss(() => {
-      window.localStorage.setItem("modalDisplay", "true");
-    });
-    modal.present();
     
     setTimeout(() => {
       this.hymnFilterSearchbar.setFocus();
     }, 500);
   }
 
-  getItems(event){
+  getItems(event, searchTerm){
     let th = this;
     setTimeout(function() {
-      let st = event.target.value;
+      let st = event.target.value || searchTerm;
       if(st){
         st = st.trim();
         let activeHymnal = th.activeHymnal;
@@ -128,5 +135,24 @@ export class SearchPage {
   goBack(){
     let prevTab = this.searchCtrl.parent.previousTab(true);
     this.searchCtrl.parent.select(prevTab);
+  }
+
+  toggleMic(toggle){
+    this.micOn = toggle;
+    let voiceLoader = this.loadingCtrl.create({
+      content: "Listening..."
+    });
+    voiceLoader.present();
+
+    if(toggle){
+
+      this.speechRecog.startListening().subscribe(matches => {
+        console.log(matches);
+        this.hymnFilterSearchbar.getNativeElement().querySelector('input').value = matches[0];
+        voiceLoader.dismiss();
+        this.getItems(null, matches[0]);
+        this.speechRecog.stopListening();
+      })
+    }
   }
 }

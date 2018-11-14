@@ -12,6 +12,12 @@
             </button>
         </ion-buttons>
         <ion-searchbar (search)="getItems($event)" #searchHymn [showCancelButton]="true" placeholder="Search this hymnal"></ion-searchbar>
+        <ion-buttons end>
+            <button ion-button (tap)="toggleMic(true)" *ngIf="micAvailable">
+                <ion-icon name="mic-off" *ngIf="!micOn"></ion-icon>
+                <ion-icon name="mic" *ngIf="micOn"></ion-icon>
+            </button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
 
