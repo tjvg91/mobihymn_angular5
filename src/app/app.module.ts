@@ -29,6 +29,8 @@ import { AboutPage } from '../pages/about/about';
 import { ImageMakerPage } from '../pages/image-maker/image-maker';
 import { IntroSliderComponent } from '../components/intro-slider/intro-slider';
 import { HymnalInfoPage } from '../pages/hymnal-info/hymnal-info';
+import { SearchModalPage } from '../pages/search-modal/search-modal'
+
 import { GlobalService } from '../services/global-service';
 import { UserService } from '../services/user-service';
 
@@ -86,6 +88,7 @@ library.add(faSpinner, faFont);
     ImageMakerPage,
     IntroSliderComponent,
     HymnalInfoPage,
+    SearchModalPage,
     TabsPage
   ],
   imports: [
@@ -116,6 +119,7 @@ library.add(faSpinner, faFont);
     TunePopoverPage,
     IntroSliderComponent,
     HymnalInfoPage,
+    SearchModalPage,
     TabsPage
   ],
   providers: [
