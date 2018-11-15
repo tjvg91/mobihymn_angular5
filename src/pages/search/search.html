@@ -11,16 +11,22 @@
                 <ion-icon name="arrow-back"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-title>Search</ion-title>
+        <ion-searchbar (search)="getItems($event)" #searchHymn [showCancelButton]="true" placeholder="Search this hymnal"></ion-searchbar>
+        <ion-buttons end>
+            <button ion-button (tap)="toggleMic(true)" *ngIf="micAvailable">
+                <ion-icon name="mic-off" *ngIf="!micOn"></ion-icon>
+                <ion-icon name="mic" *ngIf="micOn"></ion-icon>
+            </button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
-    <ion-searchbar (search)="getItems($event)" #searchHymn [showCancelButton]="true" [animated]="true" placeholder="Search this hymnal"></ion-searchbar>
+<ion-content>
+    
     <ion-list>
         <ion-list-header *ngIf="searchItems">{{ searchItems.length }} Result(s)</ion-list-header>
-        <ion-item *ngFor="let item of searchItems" (click)="goToReader(item.id, item.posStanza, item.posLine)">
+        <ion-item *ngFor="let item of searchItems" (tap)="goToReader(item.id, item.posStanza, item.posLine)">
             <h2>{{ item.line }}</h2>
             <p>Hymn #{{ item.number }}</p>
         </ion-item>

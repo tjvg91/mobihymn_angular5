@@ -33,7 +33,6 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    this.canBack = this.navCtrl.parent._selectHistory.length > 0;
     this.recentNum = this.global.getRecentCount();
 
     let url = "";
@@ -51,6 +50,10 @@ export class SettingsPage {
         this.revisionString = res["_body"];
       })
     }
+  }
+
+  ionViewDidEnter(){
+    this.canBack = this.navCtrl.parent._selectHistory.length > 0;
   }
 
   showRevisionModal(){

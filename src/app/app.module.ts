@@ -29,6 +29,8 @@ import { AboutPage } from '../pages/about/about';
 import { ImageMakerPage } from '../pages/image-maker/image-maker';
 import { IntroSliderComponent } from '../components/intro-slider/intro-slider';
 import { HymnalInfoPage } from '../pages/hymnal-info/hymnal-info';
+import { SearchModalPage } from '../pages/search-modal/search-modal'
+
 import { GlobalService } from '../services/global-service';
 import { UserService } from '../services/user-service';
 
@@ -38,6 +40,7 @@ import { File } from '@ionic-native/file';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { Insomnia } from '@ionic-native/insomnia';
 import { Network } from '@ionic-native/network';
+import { SpeechRecognition } from "@ionic-native/speech-recognition";
 
 Pro.init('91b67970', {
   appVersion: '0.8.2'
@@ -86,6 +89,7 @@ library.add(faSpinner, faFont);
     ImageMakerPage,
     IntroSliderComponent,
     HymnalInfoPage,
+    SearchModalPage,
     TabsPage
   ],
   imports: [
@@ -116,6 +120,7 @@ library.add(faSpinner, faFont);
     TunePopoverPage,
     IntroSliderComponent,
     HymnalInfoPage,
+    SearchModalPage,
     TabsPage
   ],
   providers: [
@@ -127,6 +132,7 @@ library.add(faSpinner, faFont);
     FileTransfer,
     Insomnia,
     Network,
+    SpeechRecognition,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
   ]
 })

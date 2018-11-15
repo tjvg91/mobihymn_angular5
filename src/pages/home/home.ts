@@ -49,6 +49,8 @@ export class HomePage implements OnDestroy{
 
   fbHymnalsDateModified: Number;
   userHymnalsDateModified: Number;
+  fbHymnsDateModified: Array<Object>;
+  userHymnsDateModified: Array<Object>;
 
   constructor(public homeCtrl: NavController, global : GlobalService, http: Http, private platform: Platform,
               private loadingCtrl: LoadingController, private network: Network, private fileTransfer: FileTransfer,
@@ -151,11 +153,10 @@ export class HomePage implements OnDestroy{
 
   ionViewDidLoad(){
     this.canBack = this.homeCtrl.parent._selectHistory.length > 0;
-    this.getFBHymnalsDateModified();
     this.activeHymnal = this.myGlobal.getActiveHymnal();
     if(this.platform.is('cordova')){
-      
       this.isCordova = true;
+      this.getUserHymnalsDateModified();
       this.network.onConnect().subscribe(data => {
         this.isOnline = true;
         this.fetching = true;
@@ -165,6 +166,8 @@ export class HomePage implements OnDestroy{
         if(this.hymnalList == undefined){
           this.retrieveHymnals();
         }
+        this.getFBHymnalsDateModified();
+
       });
       this.network.onDisconnect().subscribe(data => {
         this.isOnline = false;
@@ -177,6 +180,10 @@ export class HomePage implements OnDestroy{
       this.isOnline = navigator.onLine;
       this.retrieveHymnals();
     }
+  }
+
+  ionViewDidEnter(){
+    this.canBack = this.homeCtrl.parent._selectHistory.length > 0;
   }
 
   getHymnalsFirebase(){
@@ -207,7 +214,7 @@ export class HomePage implements OnDestroy{
       hom.file.getFile(rootDir, 'MobiHymn/hymnals.json', { create: false }).then(fileEntry => {
         fileEntry.getMetadata(metadata => {          
           hom.userHymnalsDateModified = metadata.modificationTime.valueOf();
-          if(hom.fbHymnalsDateModified && hom.userHymnalsDateModified > hom.fbHymnalsDateModified){
+          if(hom.fbHymnalsDateModified && hom.fbHymnalsDateModified > hom.userHymnalsDateModified){
             hom.presentHymnalsInfoUpdating();
             hom.saveHymnals();
           }
@@ -216,11 +223,51 @@ export class HomePage implements OnDestroy{
     })
   }
 
-  /*getFBHymnalMetadata(){
-    this.offlineHymnalList.forEach(x => {
-      
+  getFBHymnsDateModified(){
+    let hom = this;
+    this.myGlobal.firebaseAuth.onAuthStateChanged(user => {
+      if(user){
+        hom.offlineHymnalList.forEach((val, index) => {
+          let name = 'hymnal ' + val['hymnalId'];
+          this.myGlobal.firebaseStorage.child('hymnal ' + val['hymnalId'] + '.json').getMetadata().then(metadata => {
+            hom.fbHymnsDateModified.push({
+              name: name,
+              date: new Date(metadata.updated).valueOf()
+            });
+            if(hom.fbHymnsDateModified.length > 0 && hom.fbHymnsDateModified[index]['date'] > hom.userHymnsDateModified[index]['date']){
+              hom.downloadHymns(val['hymnalId']);
+            }
+          }, err => {
+            alert(err);
+          });
+        })
+
+        
+      }
+    }, err => {
+      alert(err);
+    });    
+  }
+
+  getUserHymnsDateModified(){
+    let hom = this;
+    this.file.resolveDirectoryUrl(this.storage).then(rootDir => {
+      hom.offlineHymnalList.forEach((val, index) => {
+        let name = 'hymnal ' + val['hymnalId'];
+        hom.file.getFile(rootDir, 'MobiHymn/' + name +'.json', { create: false }).then(fileEntry => {
+          fileEntry.getMetadata(metadata => {          
+            hom.userHymnsDateModified.push({
+              name : name,
+              date: metadata.modificationTime.valueOf()
+            });
+            if(hom.userHymnsDateModified.length > 0 && hom.fbHymnsDateModified[index]['date'] > hom.userHymnsDateModified[index]['date']){
+              hom.downloadHymns(val['hymnalId']);
+            }
+          })
+        });
+      })
     })
-  }*/
+  }
 
   retrieveHymnals(){
     let hom = this;
@@ -258,7 +305,9 @@ export class HomePage implements OnDestroy{
     
     this.file.checkFile(url + '/MobiHymn', 'hymnals.json').then(() => {
       url += '/MobiHymn/hymnals.json';
-      hom.myHttp.post(url, JSON.stringify(hom.offlineHymnalList));
+      this.file.writeFile(url + '/MobiHymn', 'hymnals.json', JSON.stringify(hom.offlineHymnalList), {
+        append: false, replace: true
+      });
 
       if(hom.userHymnalsDateModified)
         hom.loadingHymnalsInfo.dismiss();
@@ -273,14 +322,15 @@ export class HomePage implements OnDestroy{
     })
   }
 
-  downloadHymns(){
+  downloadHymns(hymnalId){
     let hom = this;
     let target = hom.platform.is('android') ? hom.file.externalRootDirectory :
                           hom.file.documentsDirectory;
-    target += '/MobiHymn/hymnal ' + hom.activeHymnal + '.json';
+    var targethymnalId = hymnalId || hom.activeHymnal;
+    target += '/MobiHymn/hymnal ' + targethymnalId + '.json';
     this.myGlobal.firebaseAuth.onAuthStateChanged(function(user){
       if(user){
-        hom.myGlobal.firebaseStorage.child('hymnal ' + hom.activeHymnal + '.json').getDownloadURL().then(function(url){
+        hom.myGlobal.firebaseStorage.child('hymnal ' + targethymnalId + '.json').getDownloadURL().then(function(url){
           var newUrl = hom.platform.is('cordova') ? url :
                   url.replace(hom.firebaseRegEx, hom.firebaseStorage);
           let progressLoad = hom.loadingCtrl.create({
@@ -294,13 +344,13 @@ export class HomePage implements OnDestroy{
           })
           hom.fileTransferObj.download(newUrl, target, true).then(x => {
             progressLoad.dismiss();
-            hom.myGlobal.getHymns(hom.myHttp, parseInt(hom.activeHymnal)).subscribe(x =>{
-              hom.myGlobal.addToHymns('hymnal' + hom.activeHymnal, x);
+            hom.myGlobal.getHymns(hom.myHttp, parseInt(targethymnalId)).subscribe(x =>{
+              hom.myGlobal.addToHymns('hymnal' + targethymnalId, x);
               let activeHymn = hom.myGlobal.getActiveHymn();
               if(!activeHymn)
                 hom.myGlobal.setActiveHymn('1');
               let item = hom.hymnalList.filter(function(y){
-                return y['id'] == hom.activeHymnal;
+                return y['id'] == targethymnalId;
               })[0];
               hom.offlineHymnalList.push(item);
               hom.onlineHymnalList = _.difference(hom.hymnalList, hom.offlineHymnalList);
@@ -343,7 +393,7 @@ export class HomePage implements OnDestroy{
       if(this.isCordova){
         this.dismissLoader();
         if(this.isOnline)
-          this.downloadHymns();
+          this.downloadHymns(null);
       }
       else{
         this.myGlobal.firebaseAuth.onAuthStateChanged(function(user){
@@ -420,7 +470,7 @@ export class HomePage implements OnDestroy{
     hymnalInfoModal.onDidDismiss((data) => {
       if(data && data['download']){
         this.setActiveHymnal(hymnalId);
-        this.downloadHymns();
+        this.downloadHymns(null);
       }
     })
     hymnalInfoModal.present();

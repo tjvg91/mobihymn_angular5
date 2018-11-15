@@ -302,6 +302,10 @@ export class ReaderPage implements OnDestroy{
     //this.walkFlow1.start();
   }
 
+  ionViewDidEnter(){
+    this.canBack = this.readerCtrl.parent._selectHistory.length > 0;
+  }
+
   ngOnDestroy(){
     this.hymnSubscribe.unsubscribe();
     this.bookmarksSubscribe.unsubscribe();
