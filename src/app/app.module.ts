@@ -8,7 +8,7 @@ import { MyApp } from './app.component';
 import { Pro } from "@ionic/pro";
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSpinner, faFont } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faFont, faSlidersH } from '@fortawesome/free-solid-svg-icons';
 
 import { TabsPage } from '../pages/tabs/tabs';
 import { ReaderPage } from '../pages/reader/reader';
@@ -67,7 +67,7 @@ export class MyErrorHandler implements ErrorHandler {
   }
 }
 
-library.add(faSpinner, faFont);
+library.add(faSpinner, faFont, faSlidersH);
 
 @NgModule({
   declarations: [

@@ -88,6 +88,6 @@
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-insomnia" spec="^4.3.0" />
-    <engine name="android" spec="~7.0.0" />
     <plugin name="cordova-plugin-speechrecognition" spec="1.2.0" />
+    <engine name="android" spec="~7.1.2" />
 </widget>
