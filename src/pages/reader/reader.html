@@ -70,7 +70,7 @@
          </button>
          <button ion-button clear *ngIf="!mdiSound">
             <!-- <span class="fa fa-spinner fa-pulse fa-2x"></span> -->
-            <fa-icon name="spinner" [pulse]="true" size="2x"></fa-icon>
+            <fa-icon icon="spinner" [pulse]="true" size="2x"></fa-icon>
          </button>
    
          <button ion-button clear (tap)="stopTrack()" *ngIf="mdiPlayer && mdiSound" [disabled]="!mdiPlayer" [disabled]="currentHymn && !currentHymn['midi']">
@@ -83,7 +83,7 @@
          </ion-range>
    
          <button ion-button clear (tap)="presentMidiPopover($event)" [disabled]="currentHymn && !currentHymn['midi']">
-            <span class="fa fa-sliders fa-2x"></span>
+            <fa-icon icon="sliders-h" size="2x"></fa-icon>
          </button>
       </ng-container>
       <ng-container *ngSwitchCase="'scroller'">
