@@ -30,9 +30,13 @@
 </ion-header>
 
 <ion-content padding #lyricsContainer class="{{ 'theme-' + themeString }}" (tap)="toggleFullLyrics($event)" (pinchmove)="pinchZoom($event)" (pinchend)="curScale = 0">
-  <div class="hymn-content" *ngIf="currentHymn" [ngStyle]="{'paddingBottom.px': extraSpace, 'text-align': alignment, 'fontSize.em': fontSize, 'fontFamily': fontName, 'letterSpacing': fontName == 'Nuecha' ? '2px': 'initial'}">
-      <div class="lyrics" [innerHTML]="currentHymn.lyrics" [ngClass]="{'show-stanza': showStanza}"
-            (panend)="catchHighlightedText()" (pressup)="catchHighlightedText()">
+  <div class="hymn-content" *ngIf="currentHymn"
+      [ngStyle]="{'paddingBottom.px': extraSpace, 'fontSize.em': fontSize, 'fontFamily': fontName, 'letterSpacing': fontName == 'Nuecha' ? '2px': 'initial'}"
+      [attr.text-left]="alignment == 'left' ? true : null"
+      [attr.text-center]="alignment == 'center' ? true : null"
+      [attr.text-right]="alignment == 'right' ? true : null">
+      <div class="lyrics" [innerHTML]="getLyrics()" [ngClass]="{'show-stanza': showStanza}"
+            (panend)="catchHighlightedText($event)" (pressup)="catchHighlightedText($event)">
       </div>
   </div>
   <!-- <ng-walkthrough-flow

@@ -13,6 +13,7 @@ import { StatusBar } from '@ionic-native/status-bar'
 import { File } from '@ionic-native/file';
 import * as _ from 'lodash';
 import * as MidiPlayer from 'midi-player-js';
+import * as $ from 'jquery';
 
 /**
  * Generated class for the ReaderPage page.
@@ -141,17 +142,6 @@ export class ReaderPage implements OnDestroy{
         return val['id'] == activeHymnal;
       })[0]['image'];
       this.mdiControl['track'] = "Hymn #" + this.currentHymn['title'];
-
-      setTimeout(() => {
-        let scrollTo = window.localStorage.getItem('scrollTo');
-        if(scrollTo){
-          let scrollPos = JSON.parse(scrollTo);
-          this.lyricsContainerRef.getElementRef().nativeElement
-            .querySelector('.hymn-stanza:nth-child(' + (scrollPos['posStanza'] + 1) + ')')
-            .querySelector('.hymn-line:nth-child(' + (scrollPos['posLine'] + 1) + ')').scrollIntoView();
-          window.localStorage.removeItem('scrollTo');
-        }
-      }, 200);
         
     });
 
@@ -327,7 +317,8 @@ export class ReaderPage implements OnDestroy{
         'hymnId': this.currentHymn['id'],
         'firstLine': this.currentHymn['firstLine'],
         'number': this.currentHymn['number'],
-        'title': this.currentHymn['title']
+        'title': this.currentHymn['title'],
+        'date': new Date().getTime()
       });
       this.presentBookmarkConfirmed();
     }
@@ -435,6 +426,13 @@ export class ReaderPage implements OnDestroy{
     let fontSize = sign < 0 ? Math.max(parseFloat((this.fontSize + prod).toFixed(2)), 1.4) :
                     Math.min(parseFloat((this.fontSize + prod).toFixed(2)), 3.6);
     this.myGlobal.setFontSize(fontSize);
+  }
+
+  getLyrics(){
+    var tempDiv = $('<div></div>');
+    tempDiv.append(this.currentHymn['lyrics'].replace(/<span class="hymn-line">([^<]+)<\/span>/g, "\r\n$1"));
+    tempDiv.find('.hymn-stanza').wrapInner("<pre></pre>");
+    return tempDiv.html();
   }
 
   initializePlayer(){
@@ -583,7 +581,8 @@ export class ReaderPage implements OnDestroy{
     this.readerCtrl.parent.select(prevTab);
   }
 
-  catchHighlightedText(){
-    console.log(window.getSelection().toString());
+  catchHighlightedText(ev){
+    console.log(window.getSelection());
+    console.log(ev);
   }
 }

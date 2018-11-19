@@ -17,4 +17,44 @@ page-input-modal {
         }
         
     }
+
+    ion-item-sliding{
+        background-color: inherit !important;
+    }
+
+    ion-list{
+        &.virtual-scroll ion-item:not(:first-of-type    ){
+            border-bottom: 1px solid white !important;
+        }
+        &:not(.virtual-scroll) ion-item:not(:last-of-type){
+            border-bottom: 1px solid white !important;
+        }
+    }
+
+
+    ion-item{
+        background-color: inherit !important;
+        padding-left: 9px !important;
+
+
+        
+        .item-inner{
+
+            ion-label{
+                .item-date{
+                    color: #8e9093;
+                    float: right
+                }
+                h2
+                {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+    
+                    &.truncate{
+                        width: calc(100% - 45px);
+                    }
+                }
+            }
+        }
+    }
 }

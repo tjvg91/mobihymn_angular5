@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, ViewController, NavParams, Searchbar, AlertController, ToastController, Platform } from 'ionic-angular';
 import { GlobalService } from '../../services/global-service';
 import { File } from '@ionic-native/file';
@@ -48,9 +48,18 @@ export class InputModalPage{
 
   bkmkChangeSubscribe: any;
 
+  second: number = 1000;
+  minute: number = 1000 * 60;
+  hour: number = 1000 * 60 * 60;
+  day: number = 1000 * 60 * 60 * 24;
+  week: number = 1000 * 60 * 60 * 24 * 7;
+  month: number = 1000 * 60 * 60 * 24 * 30;
+  year: number = 1000 * 60 * 60 * 24 * 365;
+
   constructor(public viewCtrl: ViewController, inputParams: NavParams,
             private alertCtrl: AlertController, private toastCtrl: ToastController,
-            private file: File, private platform: Platform, private global: GlobalService) {
+            private file: File, private platform: Platform, private global: GlobalService,
+            private chngr: ChangeDetectorRef) {
     this.inputType = "all_hymns";
     this.navParams = inputParams;
 
@@ -89,9 +98,21 @@ export class InputModalPage{
       return item.id == activeHymn;
     })[0].number.replace(/f|s|t/, '');
 
+    let inp = this;
+
+    this.recentList = this.recentList.map(val => {
+      val['ago'] = inp.getDateDiff(val['date']);
+      return val;
+    });
+
+    this.bookmarkList = this.bookmarkList.map(val => {
+      val['ago'] = inp.getDateDiff(val['date']);
+      return val;
+    });
   }
 
   ngAfterViewInit(){
+    this.chngr.detectChanges();
     setTimeout(() => {
       this.hymnFilterSearchbar.value = this.hymnFilterString;
       this.filterHymns(null);
@@ -100,6 +121,29 @@ export class InputModalPage{
         this.hymnFilterSearchbar._searchbarInput.nativeElement.select();
       }, 500);
     }, 500);
+  }
+
+  getDateDiff(date){
+    let now = new Date();
+    let itemDate = new Date(date)
+    let diff = now.getTime() - itemDate.getTime();
+    if(diff < this.second)
+      return "now";
+    else if(diff < this.minute)
+      return (diff / this.second).toFixed(0) + "s";
+    else if(diff < this.hour)
+      return (diff / this.minute).toFixed(0) + "m";
+    else if(diff < this.day)
+      return (diff / this.hour).toFixed(0) + "h";
+    else if(diff < this.week)
+      return (diff / this.day).toFixed(0) + "d";
+    else if(diff < this.month)
+      return (diff / this.week).toFixed(0) + "w";
+    else if(diff < this.year)
+      return (diff / this.month).toFixed(0) + "M";
+    else
+      return (diff / this.year).toFixed(0) + "y";
+      
   }
 
   filterHymns(event){

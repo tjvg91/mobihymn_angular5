@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
 import { File } from '@ionic-native/file';
-import { Platform } from 'ionic-angular';
+import { Platform, DateTime } from 'ionic-angular';
 import * as SoundFont from 'soundfont-player';
 import * as Firebase from 'firebase';
 import 'firebase/firestore';
@@ -118,6 +118,7 @@ export class GlobalService {
         
         if(index >= 0)
             this.history.splice(index);
+        newValue['date'] = new Date().getTime();
 
         this.history.splice(0, 0, newValue);
         if(this.history.length > this.recentCount)
@@ -151,7 +152,8 @@ export class GlobalService {
             'hymnId': this.activeHymn,
             'hymnNumber': curHymn['number'],
             'hymnTitle': curHymn['title'],
-            'firstLine': curHymn['firstLine']
+            'firstLine': curHymn['firstLine'],
+            'date': new Date().getTime()
         });
     }
 

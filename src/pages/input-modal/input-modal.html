@@ -35,12 +35,13 @@
             <ion-list>
                 <ion-item-sliding *ngFor="let bkmk of bookmarkList">
                     <ion-item (click)="setActiveHymn(bkmk['hymnId'])">
-                        <h2>{{ bkmk['firstLine'] }}</h2>
+                        <span class="item-date" *ngIf="bkmk.date">{{ bkmk.ago }}</span>
+                        <h2 [ngClass]="{'truncate' : bkmk.date}">{{ bkmk['firstLine'] }}</h2>
                         <p>Hymn #{{ bkmk['title'] }}</p>
                     </ion-item>
                     <ion-item-options side="left">
                         <button ion-button color="danger" (click)="presentConfirmUnbookmark(bkmk['hymnId'])">
-                            <ion-icon name="close"></ion-icon>
+                            <ion-icon name="trash"></ion-icon>
                             Remove
                         </button>
                     </ion-item-options>
@@ -50,8 +51,10 @@
         <div *ngSwitchCase="'recent'">
             <ion-list>
                 <ion-item *ngFor="let recent of recentList" (click)="setActiveHymn(recent['hymnId'])">
-                    <h2>Hymn #{{ recent.hymnNumber }}</h2>
+                    <span class="item-date" *ngIf="recent.date">{{recent.ago}}</span>
+                    <h2 [ngClass]="{'truncate' : recent.date}">Hymn #{{ recent.hymnNumber }}</h2>
                     <p>{{ recent.firstLine }}</p>
+                    
                 </ion-item>
             </ion-list>
         </div>

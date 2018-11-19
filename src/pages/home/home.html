@@ -13,7 +13,7 @@
     <div class="banner" type="progress" *ngIf="fetching">
         Loading hymnals...
     </div>
-    <h4 ion-text>Choose a hymnal to read</h4>
+    <h4 ion-text>Choose a hymnal to read: </h4>
     <ion-list>
         <ion-item-group *ngIf="offlineHymnalList.length > 0 && !desktop && !tab">
             <ion-item *ngFor="let hymnal of offlineHymnalList" (tap)="setActiveHymnal(hymnal.id, true)" [ngClass]="{ 'active': (activeHymnal == hymnal.id) }" text-wrap>
