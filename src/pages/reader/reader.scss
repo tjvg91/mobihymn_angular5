@@ -66,7 +66,7 @@ page-reader {
             background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/images/Congregation%20Singing.jpg');
             background-size: cover;
             color: map-get($colors, 'light');
-            .hymn-line::selection,
+            pre::selection,
             .first-letter::selection {
                 background-color: map-get($colors, 'primary');
                 color: map-get($colors, 'dark');
@@ -75,7 +75,7 @@ page-reader {
         &.theme-light {
             background: map-get($colors, 'light');
             color: map-get($colors, 'dark');
-            .hymn-line::selection,
+            pre::selection,
             .first-letter::selection {
                 background-color: map-get($colors, 'dark');
                 color: map-get($colors, 'primary');
@@ -84,7 +84,7 @@ page-reader {
         &.theme-tan {
             background: map-get($colors, 'primary');
             color: map-get($colors, 'dark');
-            .hymn-line::selection,
+            pre::selection,
             .first-letter::selection {
                 background-color: map-get($colors, 'dark');
                 color: map-get($colors, 'primary');
@@ -93,7 +93,7 @@ page-reader {
         &.theme-black {
             background: #000000;
             color: map-get($colors, 'light');
-            .hymn-line::selection,
+            pre::selection,
             .first-letter::selection {
                 background-color: map-get($colors, 'primary');
                 color: map-get($colors, 'dark');
@@ -102,7 +102,7 @@ page-reader {
         &.theme-dark {
             background: map-get($colors, 'dark-2');
             color: map-get($colors, 'light');
-            .hymn-line::selection,
+            pre::selection,
             .first-letter::selection {
                 background-color: map-get($colors, 'primary');
                 color: map-get($colors, 'dark');
@@ -118,20 +118,28 @@ page-reader {
                     display: block;
                     margin-bottom: 1em;
                     user-select: text !important;
-                    .hymn-line {
-                        display: block;
-                        line-height: 125%;
+                    pre {
+                        margin: 0;
+                        font-family: inherit;
+                        font-size: inherit;
                         user-select: text !important;
+                        overflow: inherit;                        
+                        white-space: pre-wrap;
+                        word-break: break-word;
+                        line-height: 150%;
                     }
                 }
                 .hymn-refrain {
                     display: block;
                     margin-bottom: 20px;
                     user-select: text !important;
-                    .hymn-line {
+                    pre {
                         display: block;
-                        line-height: 125%;
+                        line-height: 150%;
                         user-select: text !important;
+                        overflow: inherit;
+                        white-space: pre-wrap;
+                        word-break: break-word;
                     }
                 }
             }
