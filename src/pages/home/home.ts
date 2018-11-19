@@ -282,15 +282,25 @@ export class HomePage implements OnDestroy{
       if(user){
         hom.fetching = true;
         hom.getHymnalsFirebase().then(function(url){
-          var newUrl = hom.platform.is('cordova') ? url :
+          alert("Getting hymnal firebase success");
+          var newUrl = //hom.platform.is('cordova') ? url :
                       url.replace(hom.firebaseRegEx, hom.firebaseStorage);
           hom.myHttp.get(newUrl).map(x => x.json()).subscribe(x => {
+            alert("Getting hymnals success");
+            alert(x);
+            alert(x['output']);
             hom.myGlobal.addToHymnals(x.output);
+            hom.fetching = false;
+          }, err => {
+            alert("Getting hymnals err: " + err);
             hom.fetching = false;
           });
         }).catch(function(err){
+          alert("Error getting hymnal: " + err)
         });
       }
+    }, err => {
+      alert("Error authenticating: " + err.message);
     });
     this.activeHymnal = this.myGlobal.getActiveHymnal();
   }

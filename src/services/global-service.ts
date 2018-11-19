@@ -75,11 +75,13 @@ export class GlobalService {
         this.firebaseAuthFBProvider = new Firebase.auth.FacebookAuthProvider();
         this.firebaseCollection = this.firebaseApp.firestore();
 
-        this.firebaseAuth.onAuthStateChanged(function(user){
+        this.firebaseAuth.onAuthStateChanged(user => {
             if(user){
                 global.isAuthenticated = true;
                 global.firebaseStorage = Firebase.storage().ref();            
             }
+        }, err => {
+            alert("Error: " + err.message)
         });
         this.firebaseAuth.signInWithEmailAndPassword("tim.gandionco@gmail.com", "Tjvg1991")
      }
@@ -254,7 +256,7 @@ export class GlobalService {
         let url = "";
         console.log(this.file)
         if(!this.platform.is('cordova'))
-            url = '../assets/hymnals/hymnals.json';
+            url = 'assets/hymnals/hymnals.json';
         else if(this.platform.is('android'))
             url = this.file.externalRootDirectory + '/MobiHymn/hymnals.json';
         else if(this.platform.is('ios'))
@@ -269,17 +271,13 @@ export class GlobalService {
         else if(this.platform.is('ios'))
             url = this.file.documentsDirectory + '/MobiHymn/hymnal ' + i + '.json';
         else
-            url = '../assets/hymnal ' + i + '.json';
+            url = 'assets/hymnal ' + i + '.json';
         return http.get(url).map(res => res.json());
     }
 
     getSoundfonts(){
         let url = "";
-        if(this.platform.is('cordova'))
-            url = this.file.applicationDirectory + 'www/'
-        else
-            url = '../';
-        url += 'assets/js/soundfonts/acoustic_grand_piano-mp3.js';
+        url = 'assets/js/soundfonts/acoustic_grand_piano-mp3.js';
         this.ac = new AudioContext();
         return SoundFont.instrument(this.ac, url);
     }

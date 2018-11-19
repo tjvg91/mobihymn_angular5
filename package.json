@@ -59,8 +59,7 @@
     "rxjs": "5.5.11",
     "soundfont-player": "^0.10.7",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.26",
-    "cordova-android": "~7.0.0"
+    "zone.js": "0.8.26"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.11",
