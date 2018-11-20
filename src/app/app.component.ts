@@ -90,7 +90,6 @@ export class MyApp{
     else{
       this.checkSettings("read");
     }
-    console.log(this);
   }
 
   @HostListener('window:beforeunload')

@@ -71,6 +71,7 @@ export class ReaderPage implements OnDestroy{
   alignmentSubscribe: any;
   soundFontSubscribe: any;
   showStanzaSubscribe: any;
+  tabsHistorySubscribe: any;
 
   extraSpace: Number = 0;
   alignment: string = "left";
@@ -171,6 +172,10 @@ export class ReaderPage implements OnDestroy{
 
     this.showStanzaSubscribe = global.showStanzaChange.subscribe(value => {
       this.showStanza = value;
+    });
+
+    this.tabsHistorySubscribe = global.tabsHistoryChange.subscribe(value => {
+      this.canBack = value.length > 1;
     })
   }
 
@@ -289,10 +294,6 @@ export class ReaderPage implements OnDestroy{
       return val['id'] == activeHymnal;
     })[0]['image'];
     this.mdiControl['track'] = "Hymn #" + this.currentHymn['title'];
-    //this.walkFlow1.start();
-  }
-
-  ionViewDidEnter(){
     this.canBack = this.readerCtrl.parent._selectHistory.length > 0;
   }
 

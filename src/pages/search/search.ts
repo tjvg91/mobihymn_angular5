@@ -21,12 +21,18 @@ export class SearchPage {
   canBack: boolean;
   micAvailable: boolean;
   micOn: boolean;
+  
+  tabsHistorySubscribe: any;
 
   constructor(public searchCtrl: NavController, private loadingCtrl: LoadingController, public navParams: NavParams,
               private global : GlobalService, private modalCtrl: ModalController, private speechRecog: SpeechRecognition) {    
     this.hymnList = global.getHymnList();
     this.activeHymnal = global.getActiveHymnal();
     this.micOn = false;
+
+    this.tabsHistorySubscribe = this.global.tabsHistoryChange.subscribe(value => {
+      this.canBack = value.length > 1;
+    })
   }
 
   ionViewDidLoad(){

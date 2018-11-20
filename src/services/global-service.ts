@@ -28,6 +28,8 @@ export class GlobalService {
     fontName: string = "Roboto"
     theme: string = "light";
     showStanza: boolean = true;
+    tabsHistory: Array<string>;
+
     public instrument: Object = {
         "name" : "piano",
         "value": "acoustic_grand_piano-mp3"
@@ -58,6 +60,7 @@ export class GlobalService {
     public themeChange : Subject<string> = new Subject<string>();
     public soundFontChange: Subject<object> = new Subject<object>();
     public showStanzaChange: Subject<boolean> = new Subject<boolean>();
+    public tabsHistoryChange: Subject<Array<string>> = new Subject<Array<string>>();
 
     constructor(private file: File, private platform: Platform) {
         this.fireConfig = {
@@ -200,6 +203,11 @@ export class GlobalService {
         this.showStanzaChange.next(newValue);
     }
 
+    setTabsHistory(newValue: Array<string>){
+        this.tabsHistory = newValue;
+        this.tabsHistoryChange.next(newValue);
+    }
+
     getHymnalList() : Array<object>{
         return this.hymnals;
     }
@@ -254,7 +262,6 @@ export class GlobalService {
 
     getHymnals(http: Http){
         let url = "";
-        console.log(this.file)
         if(!this.platform.is('cordova'))
             url = '../assets/hymnals/hymnals.json';
         else if(this.platform.is('android'))
@@ -288,6 +295,10 @@ export class GlobalService {
 
     getShowStanza(){
         return this.showStanza;
+    }
+
+    getTabsHistory(){
+        return this.tabsHistory;
     }
 
     isInBookmark(hymnalId, hymnId){
