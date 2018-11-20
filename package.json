@@ -27,6 +27,7 @@
     "@ionic-native/core": "~4.11.0",
     "@ionic-native/file": "^4.17.0",
     "@ionic-native/file-transfer": "^4.17.0",
+    "@ionic-native/http": "^4.17.0",
     "@ionic-native/insomnia": "^4.17.0",
     "@ionic-native/network": "^4.17.0",
     "@ionic-native/speech-recognition": "^4.17.0",
@@ -78,7 +79,8 @@
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-speechrecognition": {}
+      "cordova-plugin-speechrecognition": {},
+      "cordova-plugin-advanced-http": {}
     },
     "platforms": [
       "android"

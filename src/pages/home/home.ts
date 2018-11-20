@@ -19,8 +19,6 @@ export class HomePage implements OnDestroy{
   offlineHymnalList: Array<object> = new Array<object>();
   onlineHymnalList: Array<object>;
   hymnList: Array<object>;
-  myHttp: Http;
-  myGlobal: GlobalService;
   readerLoader: any;
   isOnline: boolean = true;
   isCordova: boolean = false;
@@ -53,18 +51,16 @@ export class HomePage implements OnDestroy{
   fbHymnsDateModified: Array<Object>;
   userHymnsDateModified: Array<Object>;
 
-  constructor(public homeCtrl: NavController, global : GlobalService, http: Http, private platform: Platform,
+  constructor(public homeCtrl: NavController, private myGlobal : GlobalService, private myHttp: Http, private platform: Platform,
               private loadingCtrl: LoadingController, private network: Network, private fileTransfer: FileTransfer,
               private alertCtrl: AlertController, private file: File, private user: UserService, private modalCtrl: ModalController) {
     this.title = "MobiHymn";
-    this.myGlobal = global;
 
-    this.myHttp = http;
     let hom = this;
 
     this.fileTransferObj = fileTransfer.create();
 
-    this.hymnalSubscribe = global.hymnalChange.subscribe((value) => {
+    this.hymnalSubscribe = myGlobal.hymnalChange.subscribe((value) => {
       this.hymnalList = value;
       if(this.isOnline)
         this.onlineHymnalList = hom.hymnalList.filter(function(obj1){
@@ -82,7 +78,7 @@ export class HomePage implements OnDestroy{
       }
     });
 
-    this.activeHymnalSubscribe = global.activeHymnalChange.subscribe(val => {
+    this.activeHymnalSubscribe = myGlobal.activeHymnalChange.subscribe(val => {
       if(val){
         this.showLoader();
         if(this.isCordova){
@@ -121,7 +117,7 @@ export class HomePage implements OnDestroy{
       });
     };
 
-    this.tabsHistorySubscribe = global.tabsHistoryChange.subscribe(value => {
+    this.tabsHistorySubscribe = myGlobal.tabsHistoryChange.subscribe(value => {
       this.canBack = value.length > 1;
     })
 
@@ -292,7 +288,7 @@ export class HomePage implements OnDestroy{
         hom.fetching = true;
         hom.getHymnalsFirebase().then(function(url){
           alert("Getting hymnal firebase success\n" + url);
-          var newUrl = //hom.platform.is('cordova') ? url :
+          var newUrl = hom.platform.is('cordova') ? url :
                       url.replace(hom.firebaseRegEx, hom.firebaseStorage);
           hom.myHttp.get(newUrl).subscribe(x => {
             alert("Getting hymnals success");
