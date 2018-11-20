@@ -29,6 +29,7 @@ export class HomePage implements OnDestroy{
   hymnalSubscribe: any;
   activeHymnalSubscribe: any;
   loadingHymnalsInfo: any;
+  tabsHistorySubscribe: any;
 
   activeHymnal: string;
   progressIndicator: string = "0";
@@ -118,7 +119,11 @@ export class HomePage implements OnDestroy{
       this.myGlobal.getSoundfonts().then(function(instru){
         hom.myGlobal.setSoundFont(instru);
       });
-    }
+    };
+
+    this.tabsHistorySubscribe = global.tabsHistoryChange.subscribe(value => {
+      this.canBack = value.length > 1;
+    })
 
     this.android = platform.is('android');
     this.ios = platform.is('ios');
@@ -181,9 +186,6 @@ export class HomePage implements OnDestroy{
       this.isOnline = navigator.onLine;
       this.retrieveHymnals();
     }
-  }
-
-  ionViewDidEnter(){
     this.canBack = this.homeCtrl.parent._selectHistory.length > 0;
   }
 

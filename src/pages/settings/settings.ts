@@ -26,9 +26,14 @@ export class SettingsPage {
   canBack: boolean;
 
   recentSubscribe: any;
+  tabsHistorySubscribe: any;
+
   constructor(public navCtrl: NavController, private http: Http, private revisionsModal: ModalController, private authorModal: ModalController, private global: GlobalService,  private platform: Platform, private file: File) {
     this.recentSubscribe = global.historyCountChange.subscribe(value =>{
       console.log(value);
+    });
+    this.tabsHistorySubscribe = global.tabsHistoryChange.subscribe(value => {
+      this.canBack = value.length > 1;
     })
   }
 
@@ -50,9 +55,6 @@ export class SettingsPage {
         this.revisionString = res["_body"];
       })
     }
-  }
-
-  ionViewDidEnter(){
     this.canBack = this.navCtrl.parent._selectHistory.length > 0;
   }
 
