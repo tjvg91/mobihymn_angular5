@@ -38,7 +38,7 @@ export class SettingsPage {
     let url = "";
     if(this.platform.is('cordova')){
         this.platform.ready().then(() => {
-          url = this.file.applicationDirectory + 'www/assets/revision.html';
+          url = 'assets/revision.html';
           this.http.get(url).map(res => res).subscribe(res => {
             this.revisionString = res["_body"];
           })

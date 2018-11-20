@@ -171,6 +171,7 @@ export class HomePage implements OnDestroy{
       });
       this.network.onDisconnect().subscribe(data => {
         this.isOnline = false;
+        this.fetching = false;
       });
       this.fetching = true;
       this.retrieveHymnals();
@@ -273,23 +274,28 @@ export class HomePage implements OnDestroy{
     let hom = this;
     this.platform.ready().then(() => {
       this.myGlobal.getHymnals(this.myHttp).subscribe(res => {
-        hom.offlineHymnalList = res;
-        hom.myGlobal.setHymnals(res);
-        hom.fetching = false;
+        if(res['hymnalID']){
+          hom.offlineHymnalList.push(res);
+          hom.myGlobal.addToHymnals(res);
+        }
       });
+    });
+    this.myHttp.get('assets/hymnals/hymnals.json').map(x => x.json()).subscribe(res => {
+      hom.offlineHymnalList.push(res);
+      hom.myGlobal.addToHymnals(res);
+      hom.fetching = false;
     });
     this.myGlobal.firebaseAuth.onAuthStateChanged(function(user){
       if(user){
         hom.fetching = true;
         hom.getHymnalsFirebase().then(function(url){
-          alert("Getting hymnal firebase success");
+          alert("Getting hymnal firebase success\n" + url);
           var newUrl = //hom.platform.is('cordova') ? url :
                       url.replace(hom.firebaseRegEx, hom.firebaseStorage);
-          hom.myHttp.get(newUrl).map(x => x.json()).subscribe(x => {
+          hom.myHttp.get(newUrl).subscribe(x => {
             alert("Getting hymnals success");
             alert(x);
-            alert(x['output']);
-            hom.myGlobal.addToHymnals(x.output);
+            hom.myGlobal.setHymnals(x.json());
             hom.fetching = false;
           }, err => {
             alert("Getting hymnals err: " + err);
